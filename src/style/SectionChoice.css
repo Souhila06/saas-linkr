@@ -1,0 +1,15 @@
+.sectionChoice{
+    font-family: 'Roboto', sans-serif;
+    padding: 30px;
+    background: #3B556D;
+}
+
+
+
+section h2{
+    font-size: 2rem;
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+
+}

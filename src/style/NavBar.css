@@ -1,0 +1,68 @@
+*{
+    font-family: 'Roboto', sans-serif;
+}
+
+.div-sign{
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dialog-signup{
+    background-color: white;
+    text-align: center;
+    padding: 40px;
+}
+.dialog-signup-item{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    gap: 30px;
+}
+.dialog-signup-item > div{
+    padding: 20px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    border: #3B556D solid 1px;
+    border-radius: 5px;
+}
+.dialog-signup .abutton1{
+    padding: 10px 15px;
+    margin-top: 30px;
+    background: #3B556D;
+    color: white;
+    font-weight: 400;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+
+   
+}
+.dialog-signup p{
+    margin-top: 20px;
+}
+.dialog-signup .abutton2{
+    padding: 10px 15px;
+    margin-top: 30px;
+    background: #5FC2B1;
+    color: white;
+    font-weight: 400;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+   
+}
+@media only screen and (max-width: 600px) {
+    .div-sign{
+        top: 48px;
+        height: 100%;
+        position: absolute;
+        background-color: #3B556D;
+        width: calc(100% + 40px);
+
+        transform: translateX(20px);
+    }
+}

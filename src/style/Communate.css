@@ -1,0 +1,47 @@
+
+.section-cammunate > div{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 0;
+    
+}
+.section-cammunate h2{
+    color: black;
+    margin-top: 30px;
+    margin-bottom: 0;
+}
+.div-doublebox-info div{
+    display: flex;
+    padding: 50px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 500px;
+    border-radius: 5px;
+    background-color: azure;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+}
+.div-doublebox-info .abutton1{
+    padding: 10px 15px;
+    margin-top: 10px;
+    background-color: #3B556D;
+    color: white;
+    font-weight: 400;
+    border-radius: 5px;
+    text-decoration: none;
+}
+.div-doublebox-info .abutton2{
+    padding: 10px 15px;
+    margin-top: 10px;
+    background: #5FC2B1;
+    color: white;
+    font-weight: 400;
+    border-radius: 5px;
+    text-decoration: none;
+}
+.div-doublebox-info h3{
+    margin: 20px;
+}
