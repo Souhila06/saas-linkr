@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -29,3 +30,7 @@ If you are developing a production application, we recommend updating the config
 =======
 # siteReact
 >>>>>>> ac02cdfc4af4b193f85207dd9b1c0505c37eefaa
+=======
+# prj-long-client
+Frontend (React js + TypeScript) de la plateforme web de mise en relation pour offreurs et demandeurs de services de développement
+>>>>>>> f11039a6af9e3623b0ed899a2e1e688b4099bc9d
