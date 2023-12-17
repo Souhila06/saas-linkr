@@ -242,20 +242,18 @@ function NavBar() {
     <h2> Sign Up</h2>
  <div className='dialog-signup-item'>
  <div>
-     
-     <img src="/image/offr.jpg"  width={"120px"} alt="" />
-     <h3>Les demandeurs</h3>
-     <p>Lorem eprehenderit untae autem! Tenetur, dolorem.</p>
-     <a className='abutton1' href="">Commencer</a>
-     
- </div>
- <div>
-     <img src="/image/deman.jpg" width={"120px"} alt="" />
-     <h3>Les offreurs</h3>
-     <p>Lorem ipsum doloexercittae autem! Tenetur, dolorem.</p>
-     <a className='abutton2' href="">Commencer</a>
-     
- </div>
+  <img src="/image/offr.jpg" width={"120px"} alt="" />
+  <h3>demandeurs</h3>
+  <p>Lorem eprehenderit untae autem! Tenetur, dolorem.</p>
+  <Link className='abutton1' to="/signup/demandeur"  onClick={handleClose}>Commencer</Link>
+</div>
+
+<div>
+  <img src="/image/deman.jpg" width={"120px"} alt="" />
+  <h3>offreurs</h3>
+  <p>Lorem ipsum doloexercittae autem! Tenetur, dolorem.</p>
+  <Link className='abutton2' to="/signup/offreur"  onClick={handleClose}>Commencer</Link>
+</div>
  </div>
  </div>
   )}

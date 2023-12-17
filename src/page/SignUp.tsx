@@ -11,25 +11,103 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import { InputLabel } from '@mui/material';
 
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
+
+
+const defaultTheme = createTheme({
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiInputBase-input': {
+            color: '#000000',
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: '#3B556D',
+            },
+            '&:hover fieldset': {
+              borderColor: '#3B556D',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#3B556D',
+            },
+          },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#5FC2BA',
+          '&:hover': {
+            backgroundColor: '#3B556D',
+          },
+        },
+      },
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: '#3B556D',
+          '&.Mui-checked': {
+            color: '#3B556D',
+          },
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: '#000000',
+        },
+      },
+    },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          color: '#000000',
+          textDecoration: 'none',
+          '&:hover': {
+            textDecoration: 'none',
+            color: '#000000 !important',
+          },
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          '&:focus': {
+            borderColor: '#3B556D !important',
+          },
+        },
+      },
+    },
+  },
+});
+
+
+
+
+const countries = [
+  { value: 'fr', label: 'France' },
+  { value: 'usa', label: 'United States of America' },
+  { value: 'canada', label: 'Canada' },
+  { value: 'uk', label: 'United Kingdom' },
+];
+
+interface SignUpProps {
+  type: string;
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+const SignUp: React.FC<SignUpProps> = ({ type }) => {
 
-export default function SignUp() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -38,10 +116,16 @@ export default function SignUp() {
       password: data.get('password'),
     });
   };
+  const [selectedCountry, setSelectedCountry] = React.useState('');
+
+  const handleChange = (event: { target: { value: any; }; }) => {
+    setSelectedCountry(event.target.value);
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="sm" style={{ marginBottom: '70px', marginTop: '70px', paddingBottom: '30px', border: '1px solid black', borderRadius: '20px' }}>
+
         <CssBaseline />
         <Box
           sx={{
@@ -51,16 +135,14 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
+          
           <Typography component="h1" variant="h5">
-            Sign up
+            Sign up {type}
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <TextField
+                <TextField 
                   autoComplete="given-name"
                   name="firstName"
                   required
@@ -68,6 +150,8 @@ export default function SignUp() {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  InputProps={{ style: { color: '#000000' } }}
+                  InputLabelProps={{ style: { color: '#000000' } }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -78,6 +162,8 @@ export default function SignUp() {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  InputProps={{ style: { color: '#000000' } }}
+                  InputLabelProps={{ style: { color: '#000000' } }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -88,6 +174,8 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  InputProps={{ style: { color: '#000000' } }}
+                  InputLabelProps={{ style: { color: '#000000' } }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -99,8 +187,32 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  InputProps={{ style: { color: '#000000' } }}
+                  InputLabelProps={{ style: { color: '#000000' } }}
                 />
               </Grid>
+              <Grid item xs={12}>
+              <FormControl fullWidth sx={{ '& .MuiOutlinedInput-notchedOutline': { borderColor: '#3B556D !important' } }}>
+              <InputLabel id="demo-simple-select-label" sx={{ color: '#000000' }}>Country</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedCountry}
+                label="Country"
+                onChange={handleChange}
+                inputProps={{ style: { color: '#000000' } }}
+                sx={{ '&:focus': { borderColor: '#3B556D !important' } }} 
+            
+              >
+                {countries.map((country) => (
+                  <MenuItem key={country.value} value={country.value}>
+                    {country.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+              </Grid>
+              
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
@@ -118,15 +230,17 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+              <Link href="#" variant="body2"  style={{ color: '#000000' }}>
                   Already have an account? Sign in
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 5 }} />
+   
       </Container>
     </ThemeProvider>
   );
 }
+
+export default SignUp;

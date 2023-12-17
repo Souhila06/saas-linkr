@@ -26,8 +26,52 @@ function Copyright(props: any) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiInputBase-input': {
+            color: '#000000',
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: '#3B556D', 
+            },
+            '&:hover fieldset': {
+              borderColor: '#3B556D', 
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#3B556D',
+            },
+          },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#5FC2BA',
+          '&:hover': {
+            backgroundColor: '#3B556D',
+          },
+        },
+      },
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: '#3B556D', 
+          '&.Mui-checked': {
+            color: '#3B556D', 
+          },
+        },
+      },
+    },
+  },
+});
+
+
 
 export default function SignIn() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -40,8 +84,9 @@ export default function SignIn() {
   };
 
   return (
+    
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="sm" style={{ marginBottom: '70px', marginTop: '70px', paddingBottom: '30px', border: '1px solid black', borderRadius: '20px' }}>
         <CssBaseline />
         <Box
           sx={{
@@ -51,10 +96,8 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
+         
+         <Typography component="h1" variant="h5" style={{ color: '#3B556D' }}>
             Sign in
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -67,6 +110,9 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              InputProps={{ style: { color: '#000000' } }}
+              InputLabelProps={{ style: { color: '#000000' } }}
+           
             />
             <TextField
               margin="normal"
@@ -77,6 +123,8 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              InputProps={{ style: { color: '#000000' } }}
+              InputLabelProps={{ style: { color: '#000000' } }}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -92,19 +140,18 @@ export default function SignIn() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+              <Link href="#" variant="body2" style={{ color: '#000000' }}>
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+              <Link href="#" variant="body2" style={{ color: '#000000' }}>
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );

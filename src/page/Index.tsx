@@ -12,11 +12,12 @@ import Comments from '../component/Comments';
 export default function Index() {
   return (
         <>
+         <NavBar/>  
         <SplitPage/>
         <SectionChoice/>
         <Communate/>
         <Comments/>
-        <Footer/>
+         <Footer/> 
         </>
   );
 };

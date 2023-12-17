@@ -62,6 +62,15 @@ const Comments: React.FC = () => (
     username="Souhila yousfi"
     rating={3}
     comment="Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica"
+
+  />
+
+<CardComments
+    
+    avatarSrc="/static/images/avatar/1.jpg"
+    username="Souhila yousfi"
+    rating={3}
+    comment="Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica"
   />
       {/* Add more CustomCard components as needed */}
     </Carousel>
