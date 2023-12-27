@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Sidenav from './Sidenav';
 import MuiDrawer from '@mui/material/Drawer';
 import { Autocomplete, Box, Button, TextField, Typography } from "@mui/material";
 import Navdahboard from "./Navdahboard";
-import DataTable from "./DataTable"
+import DataTable from "./Datatable";
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import Modal from '@mui/material/Modal';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -36,43 +36,51 @@ export default function Tache() {
     progression: "",
   });
 
- 
-
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'titre', headerName: 'Titre', width: 130 }, 
-    { field: 'dateDebut', headerName: 'Date de début', width: 150 }, 
-    { field: 'dateLimite', headerName: 'Date limite', width: 110},
-    { field: 'projet', headerName: 'Projet', width: 95},
-   
-    { field: 'afecter', headerName: 'Affecté a', width: 110},
+    { field: 'titre', headerName: 'Titre', width: 130 },
+    { field: 'dateDebut', headerName: 'Date de début', width: 150 },
+    { field: 'dateLimite', headerName: 'Date limite', width: 110 },
+    { field: 'projet', headerName: 'Projet', width: 95 },
+    { field: 'afecter', headerName: 'Affecté a', width: 110 },
     { field: 'collaborateur', headerName: 'Collaborateur', width: 150 },
     { field: 'statu', headerName: 'Statue', width: 100 },
-   
-  
   ];
-  
-  const rows = [
-    { id: 1, titre: 'Etude projet', dateDebut:'16-07-2023',dateLimite:'20-09-2023',projet:24, afecter:'souhila',collaborateur:'hadjer',statu:'Faite' },
-    { id: 2, titre: 'Etude projet', dateDebut:'16-07-2023',dateLimite:'20-09-2023',projet:24, afecter:'souhila',collaborateur:'hadjer',statu:'Faite' },
-    { id: 3, titre: 'Etude projet', dateDebut:'16-07-2023',dateLimite:'20-09-2023',projet:24, afecter:'souhila',collaborateur:'hadjer',statu:'Faite' },
-    { id: 4, titre: 'Etude projet', dateDebut:'16-07-2023',dateLimite:'20-09-2023',projet:24, afecter:'souhila',collaborateur:'hadjer',statu:'Faite' },
-    { id: 5, titre: 'Etude projet', dateDebut:'16-07-2023',dateLimite:'20-09-2023',projet:24, afecter:'souhila',collaborateur:'hadjer',statu:'Faite' },
-    { id: 6, titre: 'Etude projet', dateDebut:'16-07-2023',dateLimite:'20-09-2023',projet:24, afecter:'souhila',collaborateur:'hadjer',statu:'Faite' },
-    { id: 7, titre: 'Etude projet', dateDebut:'16-07-2023',dateLimite:'20-09-2023',projet:24, afecter:'souhila',collaborateur:'hadjer',statu:'Faite' },
+
+  const initialRows = [
+    { id: 1, titre: 'Etude projet', dateDebut: '16-07-2023', dateLimite: '20-09-2023', projet: 24, afecter: 'souhila', collaborateur: 'hadjer', statu: 'Faite' },
+    { id: 2, titre: 'front end ', dateDebut: '16-07-2023', dateLimite: '20-09-2023', projet: 24, afecter: 'souhila', collaborateur: 'hadjer', statu: 'Faite' },
+    { id: 3, titre: 'back end ', dateDebut: '16-07-2023', dateLimite: '20-09-2023', projet: 24, afecter: 'souhila', collaborateur: 'hadjer', statu: 'Faite' },
+    { id: 4, titre: 'Etude projet', dateDebut: '16-07-2023', dateLimite: '20-09-2023', projet: 24, afecter: 'souhila', collaborateur: 'hadjer', statu: 'Faite' },
+    { id: 5, titre: 'Etude projet', dateDebut: '16-07-2023', dateLimite: '20-09-2023', projet: 24, afecter: 'souhila', collaborateur: 'hadjer', statu: 'Faite' },
+    { id: 6, titre: 'Etude projet', dateDebut: '16-07-2023', dateLimite: '20-09-2023', projet: 24, afecter: 'souhila', collaborateur: 'hadjer', statu: 'Faite' },
+    { id: 7, titre: 'Etude projet', dateDebut: '16-07-2023', dateLimite: '20-09-2023', projet: 24, afecter: 'souhila', collaborateur: 'hadjer', statu: 'Faite' },
   ];
+
+  const [rows, setRows] = useState(initialRows);
+
   const handleClickGetData = (rowData: any) => {
-    console.log(rowData, "Projet")
+    console.log(rowData, "Tache")
     setRowData(rowData)
   }
+
+  const filterData = (v: { id: number; titre: string; dateDebut: string; dateLimite: string; projet: number; afecter: string; collaborateur: string; statu: string } | null) => {
+    if (v && v.titre) {
+      const filteredRows = initialRows.filter(row => row.titre.toLowerCase().includes(v.titre.toLowerCase()));
+      setRows(filteredRows);
+    } else {
+      setRows(initialRows);
+    }
+  };
+
   return (
-    <><Navdahboard />
+    <>
+      <Navdahboard />
       <Sidenav />
       <div style={{ position: 'relative', left: '240px', width: 'calc(100% - 240px)', marginTop: '64px', padding: '20px', backgroundColor: '#EBEDEF' }}>
         <div style={{ backgroundColor: 'white' }}>
           <h1 style={{ padding: '15px' }}>Taches</h1>
           <div>
-
             <Modal
               open={open}
               onClose={handleClose}
@@ -84,13 +92,14 @@ export default function Tache() {
               </Box>
             </Modal>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between',alignItems: 'center', marginBottom: '15px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
             <Autocomplete
               disablePortal
               id="combo-box-demo"
               options={rows}
               getOptionLabel={(row) => row.titre}
               sx={{ width: 300 }}
+              onChange={(e, v) => filterData(v)}
               renderInput={(params) => <TextField {...params} size="small" label="Recherche " />}
             />
             <Button
@@ -98,7 +107,7 @@ export default function Tache() {
               endIcon={<AddCircleIcon />}
               onClick={handleOpen}
               sx={{
-                marginLeft: '10px',  
+                marginLeft: '10px',
                 backgroundColor: 'black',
                 color: 'white',
                 padding: '10px',
@@ -113,19 +122,9 @@ export default function Tache() {
               Ajouter
             </Button>
           </div>
-
-
-
-          <DataTable rows={rows} columns={columns} onRowClick = {handleClickGetData} />
-
-
+          <DataTable rows={rows} columns={columns} onRowClick={handleClickGetData} />
         </div>
       </div>
-
     </>
-
-
   )
 }
-
-

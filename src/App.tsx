@@ -16,6 +16,15 @@ import Projet from './component/dashboard/Projet';
 import Tache from './component/dashboard/Tache';
 import Equipe from './component/dashboard/Equipe';
 import Compte from './component/dashboard/Compte';
+import DemandeClient from './component/dashboard/DemandeClient';
+import Mesdemande from './component/dashDemandeur/MesDemande';
+import DashDemandeur from './component/dashDemandeur/DashDemandeur';
+import CompteDemandeur  from './component/dashDemandeur/CompteDemandeur';
+import { Switch } from '@mui/material';
+import SuivreDemande from "./component/dashDemandeur/SuivreDemande";
+import DetailOffreur from "./component/dashboard/DetailOffreur";
+
+
 
 
 
@@ -44,6 +53,18 @@ function App() {
         <Route path="/offreur/message" element={<Message />} />
         <Route path="/offreur/equipe" element={<Equipe />} />
         <Route path="/offreur/compte" element={<Compte />} />
+        <Route path= "/offreur/demande" element={<DemandeClient />} />
+
+       
+        <Route path="/demandeur/dashboard" element={<DashDemandeur />} />
+        <Route path="/demandeur/mesdemande" element={<Mesdemande />} />
+        <Route path="/demandeur/comptedemandeur" element={<CompteDemandeur />} />
+
+        <Route path="/nouvelle-page" element={<SuivreDemande demande={[]} />} />
+        <Route path="/nouvelle/:id/:titre/:client/:dateenvoie/:description/:cahierDeCharge" element={<DetailOffreur closeEvent={() => {}} />} />
+
+       
+    
 
       </Routes>
       {/* <Footer/> */}

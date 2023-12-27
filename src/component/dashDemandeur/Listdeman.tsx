@@ -7,8 +7,8 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import CardContent from '@mui/material/CardContent';
-import Profile from "./Profile";
-import Personelle from './Personelle';
+import Profiledeman from './Profiledeman';
+import Personelledeman from "./Personelledeman";
 
 
 
@@ -89,7 +89,7 @@ function a11yProps(index: number) {
   };
 }
 
-export default function List() {
+export default function Listdeman() {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -109,10 +109,12 @@ export default function List() {
               </StyledTabs >
           </Box>
           <CustomTabPanel value={value} index={0}>
-          <Profile/>
+
+          <Profiledeman></Profiledeman>
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
-          <Personelle/>
+         
+           <Personelledeman></Personelledeman> 
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
               Item Three

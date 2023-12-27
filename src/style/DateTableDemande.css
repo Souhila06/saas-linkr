@@ -1,0 +1,61 @@
+.div-demande{
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    padding: 20px 40px;
+    background-color: rgb(248, 248, 248);
+
+}
+
+.div-rdv span{
+    display: block;
+    padding: 20px 0;
+}
+
+.div-rdv h1{
+    margin-bottom: 20px;
+}
+.table-text a, .div-facture a{
+    padding: 10px 15px;
+    margin: 0 5px;
+    background: #3B556D;
+    color: white;
+    font-weight: 400;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+   
+}
+
+
+
+.table-text td{
+    padding: 8px;
+    text-align: center;
+}
+.div-facture{
+    text-align: left;
+    padding: 20px 40px;
+    background-color: rgb(248, 248, 248);
+
+
+}
+.div-facture > div{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.div-refus{
+    text-align: left;
+    padding: 20px 40px;
+    background-color: rgb(248, 248, 248);
+}
+.div-refus p{
+    margin-top: 20px;
+}
+.hr-1{
+    /* border-bottom: 1px solid #ddd; */
+    margin: 0px 30px;
+
+}

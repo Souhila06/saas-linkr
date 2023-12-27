@@ -274,6 +274,31 @@ export default function Sidenav() {
     </ListItemButton>
   </ListItem>
 </List>
+
+
+<List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/demande") ? "#E0F4FF" : "white" }}>
+  <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/demande") }}>
+    <ListItemButton
+      sx={{
+        minHeight: 48,
+        justifyContent: open ? 'initial' :'center',
+        px: 2.5,
+      }}
+    >
+      <ListItemIcon
+        sx={{
+          minWidth: 0,
+          mr: open ? 3 : 'auto',
+          justifyContent: 'center',
+        }}
+      >
+        <MailIcon /> {/* Remplacez par l'icône que vous souhaitez utiliser */}
+      </ListItemIcon>
+      <ListItemText primary="Demande Client" sx={{ opacity: open ? 1 : 0 }} />
+    </ListItemButton>
+  </ListItem>
+</List>
+
         <Divider />
        
       </Drawer>

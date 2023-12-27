@@ -4,10 +4,9 @@ import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-const Personelle: React.FC = () => {
+const Personelledeman: React.FC = () => {
   const fauxInfoPersonelle = {
     nom: 'Souhila yousfi',
-    titrePoste: 'Développeur Web',
     email: 'souhila.yousfi@gmail.com',
     telephone: '0772851706',
   };
@@ -22,11 +21,6 @@ const Personelle: React.FC = () => {
           <Grid item xs={12}>
             <Typography variant="body1" gutterBottom>
               <strong>Nom:</strong> {fauxInfoPersonelle.nom}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="body1" gutterBottom>
-              <strong>Titre de Poste:</strong> {fauxInfoPersonelle.titrePoste}
             </Typography>
           </Grid>
           <Grid item xs={12}>
@@ -47,4 +41,4 @@ const Personelle: React.FC = () => {
   );
 };
 
-export default Personelle;
+export default Personelledeman;
