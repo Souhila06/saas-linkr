@@ -104,10 +104,10 @@ const countries = [
 ];
 
 interface SignUpProps {
-  type: 'offreur' | 'demandeur';
+  role: 'offreur' | 'demandeur';
 }
 
-const SignUp: React.FC<SignUpProps> = ({ type }) => {
+const SignUp: React.FC<SignUpProps> = ({ role }) => {
 
   // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
   //   event.preventDefault();
@@ -122,7 +122,7 @@ const SignUp: React.FC<SignUpProps> = ({ type }) => {
   // const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('');
+  // const [role, setRole] = useState('');
 
   const [registerUser,
     {
@@ -168,11 +168,11 @@ const SignUp: React.FC<SignUpProps> = ({ type }) => {
         >
 
           <Typography component="h1" variant="h5">
-            Sign up {type}
+            Sign up {role}
           </Typography>
           <Box component="form" noValidate /*onSubmit={handleSubmit}*/ sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={12}>
                 <TextField
                   autoComplete="given-name"
                   name="username"
@@ -230,21 +230,7 @@ const SignUp: React.FC<SignUpProps> = ({ type }) => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="role"
-                  label="role"
-                  type="role"
-                  id="role"
-                  autoComplete="new-password"
-                  InputProps={{ style: { color: '#000000' } }}
-                  InputLabelProps={{ style: { color: '#000000' } }}
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                />
-              </Grid>
+             
               {/* <Grid item xs={12}>
               <FormControl fullWidth sx={{ '& .MuiOutlinedInput-notchedOutline': { borderColor: '#3B556D !important' } }}>
               <InputLabel id="demo-simple-select-label" sx={{ color: '#000000' }}>Country</InputLabel>

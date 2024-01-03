@@ -14,6 +14,9 @@ import { useLoginUserMutation, useForgotPasswordMutation  } from '../services/au
 import { TonalitySharp } from '@mui/icons-material';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
 import { SerializedError } from '@reduxjs/toolkit/';
+import { Navigate, useNavigate } from 'react-router-dom';
+
+
 
 
 
@@ -73,7 +76,7 @@ const initialState = {
 };
 
 interface LoginResponse {
-  data?: { accessToken: string };
+  data?: { accessToken: string , username:string};
   error?: FetchBaseQueryError | SerializedError;
 }
 
@@ -81,6 +84,7 @@ export default function SignIn() {
   const [formValue, setFormValue] = useState(initialState);
   const [emailSent, setEmailSent] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const navigate= useNavigate();
   const { username, password, email} = formValue;
   const [loginUser,
     {
@@ -98,11 +102,17 @@ export default function SignIn() {
         username,
         password,
       });
-      if (response.data && response.data.accessToken) {
-        
+      if (response.data && response.data.accessToken ) {
+
         const token = response.data.accessToken;
+        const username = response.data.username;
         localStorage.setItem('accessToken', token);
-        
+        localStorage.setItem('username', username);
+
+        setShowAlert(true);
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 3000); 
       } else {
         console.log('Token introuvable dans la réponse');
       }
@@ -110,13 +120,15 @@ export default function SignIn() {
       console.log('Veuillez remplir les champs requis');
     }
   };
-
-  React.useEffect(() => {
-    if (isLoginSuccess) {
-      console.log('Connexion réussie');
+        
       
+  const [showAlert, setShowAlert] = useState(false);
+  React. useEffect(() => {
+    if (isLoginSuccess) {
+     navigate("/");
     }
   }, [isLoginSuccess]);
+
 
   const handleChange=(e:any)=>{
     setFormValue({... formValue, [e.target.name]: e.target.value})
@@ -133,6 +145,8 @@ export default function SignIn() {
       console.log('Veuillez fournir une adresse e-mail pour la réinitialisation du mot de passe');
     }
   };
+
+  
   return (
     
     <ThemeProvider theme={defaultTheme}>
@@ -237,6 +251,9 @@ export default function SignIn() {
                 Send Reset Email
               </Button>
             )}
+             <div style={{ display: showAlert ? 'block' : 'none', marginTop: '10px', padding: '10px', backgroundColor: 'green', color: 'white', borderRadius: '5px' }}>
+              User login Successfully
+            </div>
         </Box>
       </Box>
     </Container>

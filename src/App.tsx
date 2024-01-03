@@ -41,8 +41,8 @@ function App() {
         <Route path="/" element={<Index />} />
         <Route path="/login" element={<SignIn />} />
         <Route path="/login" element={<SignIn />} />
-        <Route path="/signup/demandeur" element={<SignUp type='demandeur' />} />
-        <Route path="/signup/offreur" element={<SignUp type='offreur' />} />
+        <Route path="/signup/demandeur" element={<SignUp role='demandeur' />} />
+        <Route path="/signup/offreur" element={<SignUp role='offreur' />} />
         <Route path="/service" element={<ServiceOffer />} />
 
 

@@ -1,4 +1,4 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useLayoutEffect} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -20,7 +20,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Paper, { PaperProps } from '@mui/material/Paper';
 import Draggable from 'react-draggable';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-
+import {  useLogoutMutation } from '../services/authApi';
 
 const pages = ['Acceuil', 'Nos Service', 'A propos','Notre Communauté','Avis Clients'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -58,7 +58,7 @@ function NavBar() {
   
 
   const [open, setOpen] = useState(false);
-
+  const [logout, { isSuccess: isLogoutSuccess, isError, error }] = useLogoutMutation();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -66,28 +66,35 @@ function NavBar() {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    setAccessToken(null);
+  const handleLogout = async () => {
+    const result = await logout({});
+
+    if (isLogoutSuccess) {
+      console.log('Déconnexion réussie');
+      localStorage.removeItem('accessToken');
+      setAccessToken(null);
+    } else {
+      console.error('La déconnexion a échoué');
+    }
+
+    
   };
   useEffect(() => {
     const storedToken = localStorage.getItem('accessToken');
+    const username = localStorage.getItem('username')
 
     if (storedToken) {
+      setUsername(username);
       
       try {
-        console.error('Erreur lors du décodage du token :');
-
-        // const decoded = jwt.verify(storedToken, 'SECRET123') as JwtPayload;
-        // console.log(decoded)
         setAccessToken(storedToken);
-        console.error('Erreur lors du décodage du token :');
-
+        console.log('Token décodé avec succès');
       } catch (error) {
         console.error('Erreur lors du décodage du token :', error);
       }
     }
   }, []);
+  
   return (
 <AppBar position="static" sx={{ display: 'flex', alignItems: 'center' ,background:'#3B556D' }}>
       <Container maxWidth="xl" >
@@ -210,7 +217,9 @@ function NavBar() {
           <div className='div-sign'>
           {accessToken ? (
         // Si accessToken est présent, affiche le bouton de déconnexion
-        <Button
+        <>
+         <span>{username}</span>
+         <Button
           onClick={handleLogout}
           sx={{
             backgroundColor: '#5FC2BA',
@@ -227,6 +236,9 @@ function NavBar() {
         >
           Logout
         </Button>
+       
+        </>
+       
       ) : (
         // Sinon, affiche les boutons de connexion et d'inscription
         <>
