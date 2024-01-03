@@ -18,7 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import {useNavigate, useLocation} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import EventIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
@@ -55,7 +55,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
- 
+
   ...theme.mixins.toolbar,
 }));
 
@@ -80,229 +80,238 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function Sidenav() {
   const theme = useTheme();
- 
+
   const [open, setOpen] = React.useState(true);
-  const navigate =useNavigate();
- 
+  const navigate = useNavigate();
+
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-    
+
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          <IconButton onClick={()=>setOpen(!open)}>
+          <IconButton onClick={() => setOpen(!open)}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
         <Divider />
         <List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/dashboard") ? "#E0F4FF" : "white" }}>
-  <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/dashboard") }}>
-    <ListItemButton
-      sx={{
-        minHeight: 48,
-        justifyContent: open ? 'initial' : 'center',
-        px: 2.5,
-      }}
-    >
-      <ListItemIcon
-        sx={{
-          minWidth: 0,
-          mr: open ? 3 : 'auto',
-          justifyContent: 'center',
-        }}
-      >
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" sx={{ opacity: open ? 1 : 0 }} />
-    </ListItemButton>
-  </ListItem>
-</List>
-<List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/evenement") ? "#E0F4FF" : "white" }}>
-  <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/evenement") }}>
-    <ListItemButton
-      sx={{
-        minHeight: 48,
-        justifyContent: open ? 'initial' : 'center',
-        px: 2.5,
-      }}
-    >
-      <ListItemIcon
-        sx={{
-          minWidth: 0,
-          mr: open ? 3 : 'auto',
-          justifyContent: 'center',
-        }}
-      >
-        <EventIcon />
-      </ListItemIcon>
-      <ListItemText primary="Évènement " sx={{ opacity: open ? 1 : 0 }} />
-    </ListItemButton>
-  </ListItem>
-</List>
-<List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/client") ? "#E0F4FF" : "white" }}>
-  <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/client") }}>
-    <ListItemButton
-      sx={{
-        minHeight: 48,
-        justifyContent: open ? 'initial' : 'center',
-        px: 2.5,
-      }}
-    >
-      <ListItemIcon
-        sx={{
-          minWidth: 0,
-          mr: open ? 3 : 'auto',
-          justifyContent: 'center',
-        }}
-      >
-        <PeopleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Clients" sx={{ opacity: open ? 1 : 0 }} />
-    </ListItemButton>
-  </ListItem>
-</List>
-<List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/projet") ? "#E0F4FF" : "white" }}>
-  <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/projet") }}>
-    <ListItemButton
-      sx={{
-        minHeight: 48,
-        justifyContent: open ? 'initial' : 'center',
-        px: 2.5,
-        
-      }}
-    >
-      <ListItemIcon
-        sx={{
-          minWidth: 0,
-          mr: open ? 3 : 'auto',
-          justifyContent: 'center',
-        }}
-      >
-        <WorkIcon />
-      </ListItemIcon>
-      <ListItemText primary="Projets" sx={{ opacity: open ? 1 : 0 }} />
-    </ListItemButton>
-  </ListItem>
-</List>
-<List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/tache") ? "#E0F4FF" : "white" }}>
-  <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/tache") }}>
-    <ListItemButton
-      sx={{
-        minHeight: 48,
-        justifyContent: open ? 'initial' : 'center',
-        px: 2.5,
-      }}
-    >
-      <ListItemIcon
-        sx={{
-          minWidth: 0,
-          mr: open ? 3 : 'auto',
-          justifyContent: 'center',
-        }}
-      >
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Tâches" sx={{ opacity: open ? 1 : 0 }} />
-    </ListItemButton>
-  </ListItem>
-</List>
-<List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/message") ? "#E0F4FF" : "white" }}>
-  <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/message") }}>
-    <ListItemButton
-      sx={{
-        minHeight: 48,
-        justifyContent: open ? 'initial' : 'center',
-        px: 2.5,
-      }}
-    >
-      <ListItemIcon
-        sx={{
-          minWidth: 0,
-          mr: open ? 3 : 'auto',
-          justifyContent: 'center',
-        }}
-      >
-        <MailIcon /> 
-      </ListItemIcon>
-      <ListItemText primary="Messages" sx={{ opacity: open ? 1 : 0 }} />
-    </ListItemButton>
-  </ListItem>
-</List>
-<List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/equipe") ? "#E0F4FF" : "white" }}>
-  <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/equipe") }}>
-    <ListItemButton
-      sx={{
-        minHeight: 48,
-        justifyContent: open ? 'initial' : 'center',
-        px: 2.5,
-      }}
-    >
-      <ListItemIcon
-        sx={{
-          minWidth: 0,
-          mr: open ? 3 : 'auto',
-          justifyContent: 'center',
-        }}
-      >
-        <PeopleIcon /> {/* Ajoutez ici l'icône que vous souhaitez */}
-      </ListItemIcon>
-      <ListItemText primary="Équipes" sx={{ opacity: open ? 1 : 0 }} />
-    </ListItemButton>
-  </ListItem>
-</List>
+          <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/dashboard") }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                  color: '#3B556D', 
+                }}
+              >
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/evenement") ? "#E0F4FF" : "white" }}>
+          <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/evenement") }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                  color: '#3B556D', 
+                }}
+              >
+                <EventIcon />
+              </ListItemIcon>
+              <ListItemText primary="Évènement " sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/client") ? "#E0F4FF" : "white" }}>
+          <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/client") }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                  color: '#3B556D', 
+                }}
+              >
+                <PeopleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Clients" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/projet") ? "#E0F4FF" : "white" }}>
+          <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/projet") }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
 
-<List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/compte") ? "#E0F4FF" : "white" }}>
-  <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/compte") }}>
-    <ListItemButton
-      sx={{
-        minHeight: 48,
-        justifyContent: open ? 'initial' :'center',
-        px: 2.5,
-      }}
-    >
-      <ListItemIcon
-        sx={{
-          minWidth: 0,
-          mr: open ? 3 : 'auto',
-          justifyContent: 'center',
-        }}
-      >
-        <AccountBoxIcon /> {/* Ajoutez ici l'icône que vous souhaitez */}
-      </ListItemIcon>
-      <ListItemText primary="Mon Compte" sx={{ opacity: open ? 1 : 0 }} />
-    </ListItemButton>
-  </ListItem>
-</List>
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                  color: '#3B556D', 
+                }}
+              >
+                <WorkIcon />
+              </ListItemIcon>
+              <ListItemText primary="Projets" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/tache") ? "#E0F4FF" : "white" }}>
+          <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/tache") }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                  color: '#3B556D', 
+                }}
+              >
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary="Tâches" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/message") ? "#E0F4FF" : "white" }}>
+          <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/message") }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                  color: '#3B556D', 
+                }}
+              >
+                <MailIcon />
+              </ListItemIcon>
+              <ListItemText primary="Messages" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
+        </List>
+        <List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/equipe") ? "#E0F4FF" : "white" }}>
+          <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/equipe") }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                  color: '#3B556D', 
+                }}
+              >
+                <PeopleIcon /> 
+              </ListItemIcon>
+              <ListItemText primary="Équipes" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
+        </List>
+
+        <List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/compte") ? "#E0F4FF" : "white" }}>
+          <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/compte") }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                  color: '#3B556D', 
+                }}
+              >
+                <AccountBoxIcon /> {/* Ajoutez ici l'icône que vous souhaitez */}
+              </ListItemIcon>
+              <ListItemText primary="Mon Compte" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
+        </List>
 
 
-<List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/demande") ? "#E0F4FF" : "white" }}>
-  <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/demande") }}>
-    <ListItemButton
-      sx={{
-        minHeight: 48,
-        justifyContent: open ? 'initial' :'center',
-        px: 2.5,
-      }}
-    >
-      <ListItemIcon
-        sx={{
-          minWidth: 0,
-          mr: open ? 3 : 'auto',
-          justifyContent: 'center',
-        }}
-      >
-        <MailIcon /> {/* Remplacez par l'icône que vous souhaitez utiliser */}
-      </ListItemIcon>
-      <ListItemText primary="Demande Client" sx={{ opacity: open ? 1 : 0 }} />
-    </ListItemButton>
-  </ListItem>
-</List>
+        <List sx={{ padding: 0, backgroundColor: location.pathname.includes("/offreur/demande") ? "#E0F4FF" : "white" }}>
+          <ListItem disablePadding sx={{ display: 'block' }} onClick={() => { navigate("/offreur/demande") }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                  color: '#3B556D', 
+                }}
+              >
+                <MailIcon /> {/* Remplacez par l'icône que vous souhaitez utiliser */}
+              </ListItemIcon>
+              <ListItemText primary="Demande Client" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
+        </List>
 
         <Divider />
-       
+
       </Drawer>
-     
+
     </Box>
   );
 }

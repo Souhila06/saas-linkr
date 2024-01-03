@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { useRegisterUserMutation } from '../services/authApi';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
@@ -103,25 +104,55 @@ const countries = [
 ];
 
 interface SignUpProps {
-  type: string;
+  type: 'offreur' | 'demandeur';
 }
 
 const SignUp: React.FC<SignUpProps> = ({ type }) => {
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   console.log('username:', username);
+  //   console.log('Email:', email);
+  //   console.log('Password:', password);
+  
+  // };
   const [selectedCountry, setSelectedCountry] = React.useState('');
 
-  const handleChange = (event: { target: { value: any; }; }) => {
-    setSelectedCountry(event.target.value);
+  const [username, setusername] = useState('');
+  // const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('');
+
+  const [registerUser,
+    {
+      data: registerData,
+      isSuccess: isRegisterSuccess,
+      isError: isRegisterError,
+      error:registerError,
+    }
+  ] = useRegisterUserMutation();
+
+  const handleRegister = async () => {
+    if (username && password && email && (role === "demandeur" || role === "offreur")) {
+      await registerUser({
+        username,
+        email,
+        password,
+        role,
+      });
+    } else {
+      console.log('Veuillez remplir les champs requis');
+   
+    }
   };
 
+  React.useEffect(() => {
+    if (isRegisterSuccess) {
+      console.log('register  réussie');
+      
+    }
+  }, [isRegisterSuccess]);
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="sm" style={{ marginBottom: '70px', marginTop: '70px', paddingBottom: '30px', border: '1px solid black', borderRadius: '20px' }}>
@@ -135,27 +166,29 @@ const SignUp: React.FC<SignUpProps> = ({ type }) => {
             alignItems: 'center',
           }}
         >
-          
+
           <Typography component="h1" variant="h5">
             Sign up {type}
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" noValidate /*onSubmit={handleSubmit}*/ sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <TextField 
+                <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="username"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="username"
+                  label="username"
                   autoFocus
                   InputProps={{ style: { color: '#000000' } }}
                   InputLabelProps={{ style: { color: '#000000' } }}
+                  value={username}
+                  onChange={(e) => setusername(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
+                {/* <TextField
                   required
                   fullWidth
                   id="lastName"
@@ -164,7 +197,9 @@ const SignUp: React.FC<SignUpProps> = ({ type }) => {
                   autoComplete="family-name"
                   InputProps={{ style: { color: '#000000' } }}
                   InputLabelProps={{ style: { color: '#000000' } }}
-                />
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                /> */}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -176,6 +211,8 @@ const SignUp: React.FC<SignUpProps> = ({ type }) => {
                   autoComplete="email"
                   InputProps={{ style: { color: '#000000' } }}
                   InputLabelProps={{ style: { color: '#000000' } }}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -189,9 +226,26 @@ const SignUp: React.FC<SignUpProps> = ({ type }) => {
                   autoComplete="new-password"
                   InputProps={{ style: { color: '#000000' } }}
                   InputLabelProps={{ style: { color: '#000000' } }}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="role"
+                  label="role"
+                  type="role"
+                  id="role"
+                  autoComplete="new-password"
+                  InputProps={{ style: { color: '#000000' } }}
+                  InputLabelProps={{ style: { color: '#000000' } }}
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                />
+              </Grid>
+              {/* <Grid item xs={12}>
               <FormControl fullWidth sx={{ '& .MuiOutlinedInput-notchedOutline': { borderColor: '#3B556D !important' } }}>
               <InputLabel id="demo-simple-select-label" sx={{ color: '#000000' }}>Country</InputLabel>
               <Select
@@ -211,8 +265,8 @@ const SignUp: React.FC<SignUpProps> = ({ type }) => {
                 ))}
               </Select>
             </FormControl>
-              </Grid>
-              
+              </Grid> */}
+
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
@@ -221,23 +275,24 @@ const SignUp: React.FC<SignUpProps> = ({ type }) => {
               </Grid>
             </Grid>
             <Button
-              type="submit"
+           
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={()=>handleRegister()}
             >
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-              <Link href="#" variant="body2"  style={{ color: '#000000' }}>
+                <Link href="#" variant="body2" style={{ color: '#000000' }}>
                   Already have an account? Sign in
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-   
+
       </Container>
     </ThemeProvider>
   );

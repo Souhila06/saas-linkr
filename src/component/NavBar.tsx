@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -19,8 +19,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Paper, { PaperProps } from '@mui/material/Paper';
 import Draggable from 'react-draggable';
-
-
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 
 const pages = ['Acceuil', 'Nos Service', 'A propos','Notre Communauté','Avis Clients'];
@@ -37,14 +36,16 @@ function PaperComponent(props: PaperProps) {
   );
 }
 function NavBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
+
+
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
@@ -56,7 +57,7 @@ function NavBar() {
   };
   
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -65,7 +66,28 @@ function NavBar() {
   const handleClose = () => {
     setOpen(false);
   };
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    setAccessToken(null);
+  };
+  useEffect(() => {
+    const storedToken = localStorage.getItem('accessToken');
 
+    if (storedToken) {
+      
+      try {
+        console.error('Erreur lors du décodage du token :');
+
+        // const decoded = jwt.verify(storedToken, 'SECRET123') as JwtPayload;
+        // console.log(decoded)
+        setAccessToken(storedToken);
+        console.error('Erreur lors du décodage du token :');
+
+      } catch (error) {
+        console.error('Erreur lors du décodage du token :', error);
+      }
+    }
+  }, []);
   return (
 <AppBar position="static" sx={{ display: 'flex', alignItems: 'center' ,background:'#3B556D' }}>
       <Container maxWidth="xl" >
@@ -186,13 +208,34 @@ function NavBar() {
             </Menu>
           </Box>
           <div className='div-sign'>
-                
-                <Button
-                component={Link}
-                to="/login"
+          {accessToken ? (
+        // Si accessToken est présent, affiche le bouton de déconnexion
+        <Button
+          onClick={handleLogout}
+          sx={{
+            backgroundColor: '#5FC2BA',
+            color: 'white',
+            padding: '10px 20px',
+            marginLeft: '20px',
+            fontWeight: '500',
+            border: 'solid #5FC2BA 1px',
+            '&:hover': {
+              backgroundColor: '#3B556D',
+              color: '#5FC2BA',
+            },
+          }}
+        >
+          Logout
+        </Button>
+      ) : (
+        // Sinon, affiche les boutons de connexion et d'inscription
+        <>
+          <Button
+            component={Link}
+            to="/login"
             sx={{
               backgroundColor: '#3B556D',
-              color: '#5FC2BA', 
+              color: '#5FC2BA',
               padding: '10px 20px',
               fontWeight: '500',
               border: 'solid white 1px',
@@ -200,30 +243,30 @@ function NavBar() {
                 backgroundColor: '#5FC2BA',
                 color: 'white',
                 border: 'solid #3B556D 1px',
-    
-                
               },
             }}
           >
             Login
           </Button>
           <Button
-          onClick={handleClickOpen}
-      sx={{
-        backgroundColor: '#5FC2BA',
-        color: 'white',
-        padding: '10px 20px',
-        marginLeft: '20px',
-        fontWeight: '500',
-        border: 'solid #5FC2BA 1px',
-        '&:hover': {
-          backgroundColor: '#3B556D',
-          color: '#5FC2BA',
-        },
-      }}
-    >
-      Sign up
-    </Button>
+            onClick={handleClickOpen}
+            sx={{
+              backgroundColor: '#5FC2BA',
+              color: 'white',
+              padding: '10px 20px',
+              marginLeft: '20px',
+              fontWeight: '500',
+              border: 'solid #5FC2BA 1px',
+              '&:hover': {
+                backgroundColor: '#3B556D',
+                color: '#5FC2BA',
+              },
+            }}
+          >
+            Sign up
+          </Button>
+        </>
+      )}
                 </div>
      
         </Toolbar>

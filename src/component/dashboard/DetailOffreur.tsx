@@ -9,9 +9,12 @@ import { LocalizationProvider, DateCalendar } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AddForm from './AddFormProjet';
 import CloseIcon from '@mui/icons-material/Close';
+import { PDFViewer } from '@react-pdf/renderer';
 import { useParams } from 'react-router-dom';
-
-
+import fleur from './fleur.png';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import htmlToPdfmake from 'html-to-pdfmake';
 
 interface DetailOffreurProps {
     closeEvent: () => void;
@@ -117,7 +120,7 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
         closeEvent();
 
     };
-
+   
 
     const handleCheckboxChangeLieu = (
         event: ChangeEvent<HTMLInputElement>,
@@ -143,16 +146,88 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
         }
     };
 
-    const generatePD = () => {
-        // Use jsPDF to generate PDF with entered information
+    const generateInvoice = () => {
         const pdf = new jsPDF();
-        pdf.text(`Client Name: ${clientName}`, 10, 20);
-        pdf.text(`Price Demand: ${priceDemand}`, 10, 30);
-        pdf.save('facture.pdf');
+    
+      
+        pdf.setFontSize(25);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Facture', 95, 25);
 
-        // Close the modal/dialog after generating the PDF
-        // handleClose();
+        pdf.addImage(fleur, 'PNG', 90, 30, 40, 40); 
+    
+     
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'normal');
+
+        
+        pdf.text(`Date: ${getCurrentDate()}`, 150, 70);
+        pdf.text(`Due Date: ${getDueDate()}`, 150, 80);
+    
+ 
+        pdf.text('Bill To:', 10, 90);
+        pdf.text(`Nom client: ${clientName}`, 10, 100);
+        pdf.text(`Adresse: ${clientName}`, 10, 110);
+        pdf.text(`Tel: ${clientName}`, 10, 120);
+
+        
+        let yOffset1 = 140;
+
+        pdf.setFontSize(14);
+        pdf.text('Description', 10, yOffset1);
+        pdf.text('Unité', 80, yOffset1);
+        pdf.text('Prix', 160, yOffset1);
+    
+        let totalAmount = 0;
+        let yOffset = 150;
+        const lineHeight = 3;
+        const price: string | number = priceDemand; // Ensure priceDemand is assigned a value
+        pdf.line(10, yOffset1 + lineHeight, 190, yOffset1 + lineHeight);
+        const items = [
+            { description: 'Item 1', unite: 1, prix: price || 0 },
+           
+        ];
+        
+        pdf.line(10, yOffset + lineHeight, 190, yOffset + lineHeight);
+        
+        items.forEach(item => {
+          
+            const itemTotal = item.unite * Number(item.prix);
+            totalAmount += itemTotal;
+        
+            pdf.text(item.description, 10, yOffset);
+            pdf.text(item.unite.toString(), 80, yOffset);
+            // pdf.text(`$${item.prix.toFixed(2)}`, 120, yOffset); 
+            pdf.text(`$${itemTotal.toFixed(2)}`, 160, yOffset);
+            pdf.line(10, yOffset + lineHeight, 190, yOffset + lineHeight);
+        
+            yOffset += 10;
+        });
+        
+      
+      
+        pdf.setFontSize(12);
+        pdf.text('Total Amount:', 120, yOffset + 10);
+        pdf.text(`$${totalAmount.toFixed(2)}`, 160, yOffset + 10);
+        pdf.line(120, yOffset + 13, 190, yOffset + 13);
+    
+   
+        pdf.save('invoice.pdf');
     };
+    
+
+    const getCurrentDate = () => {
+        const currentDate = new Date();
+        return currentDate.toISOString().split('T')[0];
+    };
+    
+  
+    const getDueDate = () => {
+        const currentDate = new Date();
+        const dueDate = new Date(currentDate.setDate(currentDate.getDate() + 30));
+        return dueDate.toISOString().split('T')[0];
+    };
+    
     const handleDateChange = (event: ChangeEvent<HTMLInputElement>) => {
         setSelectedDate(event.target.value);
     };
@@ -266,8 +341,8 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                                                 type="date"
                                                 variant="outlined"
                                                 size="small"
-                                                sx={{ minWidth: '100%' ,
-                                              
+                                                sx={{
+                                                    minWidth: '100%',
                                                     '& .MuiInputLabel-root': {
                                                         color: '#3B556D',
                                                     },
@@ -278,10 +353,12 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                                                         borderColor: '#3B556D',
                                                     },
                                                     '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                        borderColor: '#3B556D',
+                                                        borderColor: '#3B556D !important', // Utilisation de !important pour forcer la priorité
+                                                    },
+                                                    '& .Mui-focused .MuiInputLabel-root': {
+                                                        color: '#3B556D !important', // Utilisation de !important pour forcer la priorité
                                                     },
                                                 }}
-
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
@@ -292,95 +369,116 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                                                 size="small"
                                                 value={selectedTime}
                                                 onChange={handleTimeChange}
-                                                sx={{ minWidth: '100%' ,
-                                              
-                                                '& .MuiInputLabel-root': {
-                                                    color: '#3B556D',
-                                                },
-                                                '& .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#3B556D',
-                                                },
-                                                '&:hover .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#3B556D',
-                                                },
-                                                '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#3B556D',
-                                                },
-                                            }}
+                                                sx={{
+                                                    minWidth: '100%',
+                                                    '& .MuiInputLabel-root': {
+                                                        color: '#3B556D',
+                                                    },
+                                                    '& .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#3B556D',
+                                                    },
+                                                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#3B556D',
+                                                    },
+                                                    '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#3B556D !important', // Utilisation de !important pour forcer la priorité
+                                                    },
+                                                    '& .Mui-focused .MuiInputLabel-root': {
+                                                        color: '#3B556D !important',
+                                                    },
+                                                }}
                                             />
                                         </Grid>
 
                                         <Grid item xs={12}>
                                             <FormControlLabel
-                                                control={<Checkbox name="lieu" checked={isLieuEnabled} onChange={handleCheckboxChangeLieu} 
-                                                sx={{
-                                                    '& .MuiSvgIcon-root': {
-                                                        color: '#3B556D', // Couleur de l'icône de la checkbox
-                                                    },
-                                                    '&.Mui-checked': {
-                                                        color: '#3B556D', // Couleur de la checkbox cochée
-                                                    },
-                                                }}
-                                            />
-                                        }
+                                                control={<Checkbox name="lieu" checked={isLieuEnabled} onChange={handleCheckboxChangeLieu}
+                                                    sx={{
+                                                        '& .MuiSvgIcon-root': {
+                                                            color: '#3B556D',
+                                                        },
+                                                        '&.Mui-checked': {
+                                                            color: '#3B556D',
+                                                        },
+                                                    }}
+                                                />
+                                                }
                                                 label="Lieu"
                                             />
                                             {isLieuEnabled && (
-                                                <TextField id="outlined-basic" label="Lieu" variant="outlined" size="small"  sx={{ minWidth: '100%' ,
-                                              
-                                                '& .MuiInputLabel-root': {
-                                                    color: '#3B556D',
-                                                },
-                                                '& .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#3B556D',
-                                                },
-                                                '&:hover .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#3B556D',
-                                                },
-                                                '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#3B556D',
-                                                },
-                                            }} />
+                                                <TextField
+                                                    id="outlined-basic"
+                                                    label="Lieu"
+                                                    variant="outlined"
+                                                    size="small"
+                                                    sx={{
+                                                        minWidth: '100%',
+                                                        '& .MuiInputLabel-root': {
+                                                            color: '#3B556D',
+                                                        },
+                                                        '& .MuiOutlinedInput-notchedOutline': {
+                                                            borderColor: '#3B556D',
+                                                        },
+                                                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                            borderColor: '#3B556D',
+                                                        },
+                                                        '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                            borderColor: '#3B556D', // Couleur de bordure lorsqu'il est en surbrillance
+                                                        },
+                                                        '& .Mui-focused .MuiInputLabel-root': {
+                                                            color: '#3B556D', // Couleur de l'étiquette lorsqu'il est en surbrillance
+                                                        },
+                                                    }}
+                                                />
                                             )}
                                         </Grid>
                                         <Grid item xs={12}>
                                             <FormControlLabel
                                                 control={<Checkbox name="lien" checked={isLienEnabled} onChange={handleCheckboxChangeLien}
-                                                sx={{
-                                                    '& .MuiSvgIcon-root': {
-                                                        color: '#3B556D', // Couleur de l'icône de la checkbox
-                                                    },
-                                                    '&.Mui-checked': {
-                                                        color: '#3B556D', // Couleur de la checkbox cochée
-                                                    },
-                                                }}
-                                            />
-                                        } 
+                                                    sx={{
+                                                        '& .MuiSvgIcon-root': {
+                                                            color: '#3B556D',
+                                                        },
+                                                        '&.Mui-checked': {
+                                                            color: '#3B556D',
+                                                        },
+                                                    }}
+                                                />
+                                                }
                                                 label="Lien"
                                             />
                                             {isLienEnabled && (
-                                                <TextField id="outlined-basic" label="Lien" variant="outlined" size="small"  sx={{ minWidth: '100%' ,
-                                              
-                                                '& .MuiInputLabel-root': {
-                                                    color: '#3B556D',
-                                                },
-                                                '& .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#3B556D',
-                                                },
-                                                '&:hover .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#3B556D',
-                                                },
-                                                '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#3B556D',
-                                                },
-                                            }} />
+                                                <TextField
+                                                    id="outlined-basic"
+                                                    label="Lien"
+                                                    variant="outlined"
+                                                    size="small"
+                                                    sx={{
+                                                        minWidth: '100%',
+                                                        '& .MuiInputLabel-root': {
+                                                            color: '#3B556D',
+                                                        },
+                                                        '& .MuiOutlinedInput-notchedOutline': {
+                                                            borderColor: '#3B556D',
+                                                        },
+                                                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                            borderColor: '#3B556D',
+                                                        },
+                                                        '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                            borderColor: '#3B556D',
+                                                        },
+                                                        '& .Mui-focused .MuiInputLabel-root': {
+                                                            color: '#3B556D',
+                                                        },
+                                                    }}
+                                                />
                                             )}
                                         </Grid>
 
                                         <Grid item xs={12}>
                                             <Typography variant="h5" align="center">
                                                 <Button variant="contained" style={{ backgroundColor: '#3B556D', color: 'white' }} onClick={() => { }}>
-                                                  Envoyer
+                                                    Envoyer
                                                 </Button>
                                             </Typography>
                                         </Grid>
@@ -451,6 +549,7 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                                                         borderColor: '#3B556D',
                                                     },
                                                 }}
+
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
@@ -476,7 +575,7 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                                                         borderColor: '#3B556D',
                                                     },
                                                 }}
-                                            
+
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
@@ -503,16 +602,16 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                                                         borderColor: '#3B556D',
                                                     },
                                                 }}
-                                           
+
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
                                             <Button
-                                            style={{ backgroundColor: '#3B556D', color: 'white' }}
+                                                style={{ backgroundColor: '#3B556D', color: 'white' }}
                                                 variant="contained"
-                                                onClick={generatePD}
+                                                onClick={generateInvoice}
                                             >
-                                                Génerer Facture
+                                                Générer Facture
                                             </Button>
                                         </Grid>
                                     </Grid>
@@ -567,20 +666,20 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                                             fullWidth
                                             sx={{
                                                 '& .MuiInputLabel-root': {
-                                                    color: '#3B556D', 
+                                                    color: '#3B556D',
                                                 },
-                                              
+
                                                 '& .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#3B556D', 
+                                                    borderColor: '#3B556D',
                                                 },
-                                                
+
                                                 '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#3B556D', 
+                                                    borderColor: '#3B556D',
                                                 },
                                                 '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#3B556D', 
+                                                    borderColor: '#3B556D',
                                                 },
-                                               
+
                                             }}
                                         />
                                     </Grid>
@@ -615,6 +714,10 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                         </LocalizationProvider>
                     </div>
                 </div>
+
+            
+
+
                 <hr className='hr-1' />
                 <div className='div-facture'>
                     <h1>Facture</h1>
@@ -631,10 +734,14 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                     <h1>Motif refus</h1>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam excepturi quas, quis repellat est facilis nihil a maxime qui nostrum sequi temporibus illo hic asperiores quaerat harum eaque unde totam?</p>
                 </div>
+              
+
+
 
 
 
             </Box>
+        
         </>
     );
 };

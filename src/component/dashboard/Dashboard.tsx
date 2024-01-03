@@ -1,66 +1,120 @@
 import * as React from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems } from './Listitem';
-import Chart from './Chart';
-import Deposits from './Deposits';
-import Orders from './Orders';
+
 import Sidenav from './Sidenav';
 import Navdahboard from './Navdahboard';
 
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import { BarChart } from '@mui/x-charts/BarChart';
+import Grid from '@mui/material/Grid';
+import { PieChart } from '@mui/x-charts/PieChart';
+import { MdPeople } from 'react-icons/md';
+import { Height } from '@mui/icons-material';
+import IconButton from '@mui/material/IconButton';
+import { MdWork } from 'react-icons/md';
+import { MdList } from 'react-icons/md';
+import { padding } from '@mui/system';
 
 
-const drawerWidth: number = 240;
-
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
-}
-
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    '& .MuiDrawer-paper': {
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      width: drawerWidth,
-      transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      boxSizing: 'border-box',
-      ...(!open && {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
-        },
-      }),
+const chartSetting = {
+  xAxis: [
+    {
+      label: 'rainfall (mm)',
     },
-  }),
-);
+  ],
+  width: 500,
+  height: 400,
+};
+const dataset = [
+  {
+    london: 59,
+    paris: 57,
+    newYork: 86,
+    seoul: 21,
+    month: 'Jan',
+  },
+  {
+    london: 50,
+    paris: 52,
+    newYork: 78,
+    seoul: 28,
+    month: 'Fev',
+  },
+  {
+    london: 47,
+    paris: 53,
+    newYork: 106,
+    seoul: 41,
+    month: 'Mar',
+  },
+  {
+    london: 54,
+    paris: 56,
+    newYork: 92,
+    seoul: 73,
+    month: 'Apr',
+  },
+  {
+    london: 57,
+    paris: 69,
+    newYork: 92,
+    seoul: 99,
+    month: 'May',
+  },
+  {
+    london: 60,
+    paris: 63,
+    newYork: 103,
+    seoul: 144,
+    month: 'June',
+  },
+  {
+    london: 59,
+    paris: 60,
+    newYork: 105,
+    seoul: 319,
+    month: 'July',
+  },
+  {
+    london: 65,
+    paris: 60,
+    newYork: 106,
+    seoul: 249,
+    month: 'Aug',
+  },
+  {
+    london: 51,
+    paris: 51,
+    newYork: 95,
+    seoul: 131,
+    month: 'Sept',
+  },
+  {
+    london: 60,
+    paris: 65,
+    newYork: 97,
+    seoul: 55,
+    month: 'Oct',
+  },
+  {
+    london: 67,
+    paris: 64,
+    newYork: 76,
+    seoul: 48,
+    month: 'Nov',
+  },
+  {
+    london: 61,
+    paris: 70,
+    newYork: 103,
+    seoul: 25,
+    month: 'Dec',
+  },
+];
 
-
-const defaultTheme = createTheme();
-
+const valueFormatter = (value: number) => `${value}mm`;
 export default function Dashboard() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
@@ -69,61 +123,129 @@ export default function Dashboard() {
 
   return (
     <>
-     <Navdahboard />
-     <Sidenav/>
-    <ThemeProvider theme={defaultTheme}>
-    <Box sx={{ position: 'relative', left: '240px', width: 'calc(100% - 240px)', display: 'flex' }}>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            overflow: 'auto',
-          }}
-        >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                  <Chart />
-                </Paper>
-              </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                  <Deposits />
-                </Paper>
-              </Grid>
-              {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <Orders />
-                </Paper>
-              </Grid>
+      <Navdahboard />
+      <Sidenav />
+      <div style={{ position: 'relative', left: '240px', width: 'calc(100% - 240px)', marginTop: '64px', padding: '20px', backgroundColor: '#FAFAF9' }}>
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={6} md={3}>
+              <Card sx={{ maxWidth: 345, padding: '5px 20px' }}>
+              
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div>
+                    <MdPeople size={35} color="#007FA9" />
+                      <h1 style={{fontSize: '1.3rem', marginRight: '15px', fontWeight: '300' }}>Total client</h1>
+                      <h2 style={{fontSize: '1.3rem', marginRight: '15px', fontWeight: '300' }}>200</h2>
+                    </div>                
+                  </div>
+
+
+          
+              </Card>
             </Grid>
-          </Container>
+            <Grid item xs={6} md={3}>
+            <Card sx={{ maxWidth: 345, padding: '5px 20px' }}>
+
+               
+               
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div>
+                    <MdList size={35} color="#007FA9" />
+                      <h1 style={{fontSize: '1.3rem', marginRight: '15px', fontWeight: '300' }}>Mes taches</h1>
+                      <h2 style={{fontSize: '1.3rem', marginRight: '15px', fontWeight: '300' }}>200</h2>
+
+                    </div>
+                  
+                  </div>
+                  
+              </Card>
+            </Grid>
+            <Grid item xs={6} md={3}>
+            <Card sx={{ maxWidth: 345, padding: '5px 20px' }}>
+
+               
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div>
+                    <MdWork style={{padding:'4px'}} size={35} color="#007FA9" />
+                      <h1 style={{fontSize: '1.3rem', marginRight: '15px', fontWeight: '300' }}>Total projet</h1>
+                      <h2 style={{fontSize: '1.3rem', marginRight: '15px', fontWeight: '300' }}>200</h2>
+
+                    </div>
+                 
+                  </div>
+              
+              </Card>
+            </Grid>
+            <Grid item xs={6} md={3}>
+            <Card sx={{ maxWidth: 345, padding: '5px 20px' }}>
+              
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div>
+                    <MdPeople size={35} color="#007FA9" />
+                      <h1 style={{fontSize: '1.3rem', marginRight: '15px', fontWeight: '300' }}>Total client</h1>
+                      <h2 style={{fontSize: '1.3rem', marginRight: '15px', fontWeight: '300' }}>200</h2>
+
+                    </div>
+                  
+                  </div>
+
+
+              </Card>
+            </Grid>
+            <Grid item xs={6} md={6}>
+              <div style={{ height: '430px', backgroundColor: 'white', boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)' }}>
+                <h2 style={{ marginLeft: '15px', fontWeight: '300' }}>Apercu de toute les Taches</h2>
+
+                <div style={{ display: 'flex', alignItems: 'center', height: '80%' }}>
+                  <PieChart
+                    series={[
+                      {
+                        data: [
+                          { id: 0, value: 10, label: 'A faire', color: '#47EAD0' },
+                          { id: 1, value: 15, label: 'En cours', color: '#7D4FFE' },
+                          { id: 2, value: 20, label: 'Terminé', color: '#212E53' },
+                        ],
+                      },
+                    ]}
+                    width={400}
+                    height={200}
+                  />
+                </div>
+              </div>
+            </Grid>
+            <Grid item md={6}>
+              <div style={{ height: '430px', backgroundColor: 'white', boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)' }}>
+                <h2 style={{ marginLeft: '15px', fontWeight: '300' }}>Apercu des demandes recus</h2>
+
+                <BarChart
+                  dataset={dataset}
+                  yAxis={[{ scaleType: 'band', dataKey: 'month' }]}
+                  series={[
+                    {
+                      dataKey: 'seoul',
+                      label: 'Seoul rainfall',
+                      valueFormatter,
+                      color: '#007FA9',
+                    },
+                  ]}
+                  layout="horizontal"
+                  {...chartSetting}
+                />
+
+
+              </div>
+            </Grid>
+            {/* <Grid item xs={4} md={7}>
+              <div style={{ backgroundColor: 'white' }}>
+                <p>azeazeazeaz</p>
+              </div>
+            </Grid> */}
+          </Grid>
         </Box>
-      </Box>
-    </ThemeProvider></>
-   
+      </div>
+
+
+    </>
+
   );
 }
