@@ -75,10 +75,17 @@ const initialState = {
 
 };
 
+interface User {
+  username: string;
+  email: string;
+  role: string;
+}
+
 interface LoginResponse {
-  data?: { accessToken: string , username:string};
+  data?: { token: string, user: User };
   error?: FetchBaseQueryError | SerializedError;
 }
+
 
 export default function SignIn() {
   const [formValue, setFormValue] = useState(initialState);
@@ -102,19 +109,29 @@ export default function SignIn() {
         username,
         password,
       });
-      if (response.data && response.data.accessToken ) {
-
-        const token = response.data.accessToken;
-        const username = response.data.username;
+      if (response.data && response.data.token) {
+        const token = response.data.token;
+        const user: User = response.data.user;
+      
+        // Accessing user properties
+        const username = user.username;
+        const email = user.email;
+        const role = user.role;
+        
         localStorage.setItem('accessToken', token);
-        localStorage.setItem('username', username);
+        localStorage.setItem('user', JSON.stringify(user));
+      
 
         setShowAlert(true);
         setTimeout(() => {
           setShowAlert(false);
         }, 3000); 
       } else {
-        console.log('Token introuvable dans la réponse');
+        setShowErrorAlert(true);
+      setTimeout(() => {
+        setShowErrorAlert(false);
+      }, 3000);
+
       }
     } else {
       console.log('Veuillez remplir les champs requis');
@@ -122,7 +139,10 @@ export default function SignIn() {
   };
         
       
+
   const [showAlert, setShowAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+
   React. useEffect(() => {
     if (isLoginSuccess) {
      navigate("/");
@@ -219,6 +239,7 @@ export default function SignIn() {
           {!showForgotPassword && (
             <Button
               fullWidth
+              id="id-btn"
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               onClick={() => handleLogin()}
@@ -241,19 +262,16 @@ export default function SignIn() {
             </Grid>
           )}
            
-            {showForgotPassword && (
-              <Button
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                onClick={() => handleForgotPassword()}
-              >
-                Send Reset Email
-              </Button>
-            )}
-             <div style={{ display: showAlert ? 'block' : 'none', marginTop: '10px', padding: '10px', backgroundColor: 'green', color: 'white', borderRadius: '5px' }}>
+           {!showForgotPassword && (
+            <div style={{ display: showAlert ? 'block' : 'none', marginTop: '10px', padding: '10px', backgroundColor: 'green', color: 'white', borderRadius: '5px' }}>
               User login Successfully
             </div>
+          )}
+          {!showForgotPassword && (
+            <div style={{ display: showErrorAlert ? 'block' : 'none', marginTop: '10px', padding: '10px', backgroundColor: 'red', color: 'white', borderRadius: '5px' }}>
+              Connexion échouée
+            </div>
+          )}
         </Box>
       </Box>
     </Container>

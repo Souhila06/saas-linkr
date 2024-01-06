@@ -19,17 +19,19 @@ import Compte from './component/dashboard/Compte';
 import DemandeClient from './component/dashboard/DemandeClient';
 import Mesdemande from './component/dashDemandeur/MesDemande';
 import DashDemandeur from './component/dashDemandeur/DashDemandeur';
-import CompteDemandeur  from './component/dashDemandeur/CompteDemandeur';
+import CompteDemandeur from './component/dashDemandeur/CompteDemandeur';
 import { Switch } from '@mui/material';
 import SuivreDemande from "./component/dashDemandeur/SuivreDemande";
 import DetailOffreur from "./component/dashboard/DetailOffreur";
-
+import PrivateRoute from "./PrivateRoute";
+import VerifyEmail from "./component/VerifyEmail"
+import ProfileDemandeur from "./component/ProfileDemandeur"
 
 
 
 function App() {
 
-  
+
 
 
   return (
@@ -43,7 +45,22 @@ function App() {
         <Route path="/login" element={<SignIn />} />
         <Route path="/signup/demandeur" element={<SignUp role='demandeur' />} />
         <Route path="/signup/offreur" element={<SignUp role='offreur' />} />
-        <Route path="/service" element={<ServiceOffer />} />
+        <Route
+          path="/service"
+          element={
+            <PrivateRoute allowedRoles={['demandeur']}>
+              <ServiceOffer />
+            </PrivateRoute>
+          }
+        />
+          <Route
+          path="/offreur/dashboard"
+          element={
+            <PrivateRoute allowedRoles={['offreur']}>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
 
 
         <Route path="/offreur/dashboard" element={<Dashboard />} />
@@ -54,18 +71,27 @@ function App() {
         <Route path="/offreur/message" element={<Message />} />
         <Route path="/offreur/equipe" element={<Equipe />} />
         <Route path="/offreur/compte" element={<Compte />} />
-        <Route path= "/offreur/demande" element={<DemandeClient />} />
+        <Route path="/offreur/demande" element={<DemandeClient />} />
 
-       
+
         <Route path="/demandeur/dashboard" element={<DashDemandeur />} />
         <Route path="/demandeur/mesdemande" element={<Mesdemande />} />
         <Route path="/demandeur/comptedemandeur" element={<CompteDemandeur />} />
 
         <Route path="/nouvelle-page" element={<SuivreDemande demande={[]} />} />
-        <Route path="/nouvelle/:id/:titre/:client/:dateenvoie/:description/:cahierDeCharge" element={<DetailOffreur closeEvent={() => {}} />} />
+        <Route path="/nouvelle/:id/:titre/:client/:dateenvoie/:description/:cahierDeCharge" element={<DetailOffreur closeEvent={() => { }} />} />
 
-       
-    
+
+        <Route path="/verifyemail" element={<VerifyEmail />} />
+        
+        <Route
+          path="/profildemandeur"
+          element={
+            <PrivateRoute allowedRoles={['demandeur']}>
+              <ProfileDemandeur />
+            </PrivateRoute>
+          }
+        />
 
       </Routes>
       {/* <Footer/> */}

@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "wdio": "wdio run ./wdio.conf.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -44,7 +45,6 @@
     "jspdf": "^2.5.1",
     "jwt-decode": "^4.0.0",
     "pdfmake": "^0.2.8",
-    "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-draggable": "^4.4.6",
@@ -62,6 +62,9 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.2.0",
+    "@testing-library/react": "^14.1.2",
+    "@types/jest": "^29.5.11",
     "@types/jwt-decode": "^3.1.0",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.17",
@@ -69,12 +72,26 @@
     "@types/recharts": "^1.8.29",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
-    "@vitejs/plugin-react": "^4.0.3",
+    "@vitejs/plugin-react": "^4.2.1",
+    "@wdio/browser-runner": "^8.27.0",
+    "@wdio/cli": "^8.27.1",
+    "@wdio/mocha-framework": "^8.27.0",
+    "@wdio/spec-reporter": "^8.27.0",
+    "chromedriver": "^120.0.1",
     "eslint": "^8.45.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "jest": "^29.7.0",
+    "react": "^18.2.0",
     "react-router-dom": "^6.21.0",
+    "selenium-webdriver": "^4.16.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
     "vite": "^4.4.5"
-  }
+  },
+  "description": "<<<<<<< HEAD\r <<<<<<< HEAD\r # React + TypeScript + Vite",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

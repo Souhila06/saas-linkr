@@ -1,3 +1,4 @@
+import { Token } from '@mui/icons-material';
 import {createApi ,fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 
 // interface LoginUserMutationBody {
@@ -10,7 +11,12 @@ export const authApi = createApi({
     
     reducerPath: "authApi",
     baseQuery: fetchBaseQuery({
+
         baseUrl:"http://localhost:8080",
+        prepareHeaders: (headers) => {
+          headers.set("Authorization", `Bearer ${localStorage.getItem('accessToken')}`)
+            return headers
+        },
     }),
     endpoints : (builder)=>({
 
@@ -44,17 +50,27 @@ export const authApi = createApi({
           }),
           
           logout: builder.mutation({
-            query: (body: {}) => {
+            query: () => {
               return {
                 url: "/api/auth/logout",
                 method: "POST",
-                body,
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem('accessToken')}`, 
+                },
               };
             },
           }),
+          verifyEmail: builder.query({
+            query: (token: string) => ({
+              url: `/api/auth/verify?token=${token}`,
+              method: "GET",
+            }),
+          }),
           
-    }),
-   
-})
+          listOffreurs: builder.query({
+            query: () => '/api/offreurs', 
+          }),
+        }),
+      });
 
-export const {useLoginUserMutation ,useRegisterUserMutation,useForgotPasswordMutation, useLogoutMutation } = authApi;
+export const {useLoginUserMutation ,useRegisterUserMutation,useForgotPasswordMutation, useLogoutMutation,useListOffreursQuery,useVerifyEmailQuery } = authApi;

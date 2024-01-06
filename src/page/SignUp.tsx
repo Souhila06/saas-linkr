@@ -142,6 +142,7 @@ const SignUp: React.FC<SignUpProps> = ({ role }) => {
         role,
       });
     } else {
+      
       console.log('Veuillez remplir les champs requis');
    
     }
@@ -149,6 +150,7 @@ const SignUp: React.FC<SignUpProps> = ({ role }) => {
 
   React.useEffect(() => {
     if (isRegisterSuccess) {
+      
       console.log('register  réussie');
       
     }

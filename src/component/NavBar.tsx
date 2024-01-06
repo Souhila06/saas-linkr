@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect} from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -20,9 +20,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Paper, { PaperProps } from '@mui/material/Paper';
 import Draggable from 'react-draggable';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import {  useLogoutMutation } from '../services/authApi';
+import { useLogoutMutation } from '../services/authApi';
+import { PersonAdd, Settings, Logout } from '@mui/icons-material';
+import { Avatar, Divider, ListItemIcon, Tooltip } from '@mui/material';
 
-const pages = ['Acceuil', 'Nos Service', 'A propos','Notre Communauté','Avis Clients'];
+const pages = ['Acceuil', 'Nos Service', 'A propos', 'Notre Communauté', 'Avis Clients'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function PaperComponent(props: PaperProps) {
@@ -55,10 +57,10 @@ function NavBar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  
+
 
   const [open, setOpen] = useState(false);
-  const [logout, { isSuccess: isLogoutSuccess, isError, error }] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -66,37 +68,50 @@ function NavBar() {
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleLogout = async () => {
-    const result = await logout({});
+    try {
+      const result = await logout({});
 
-    if (isLogoutSuccess) {
-      console.log('Déconnexion réussie');
-      localStorage.removeItem('accessToken');
-      setAccessToken(null);
-    } else {
-      console.error('La déconnexion a échoué');
+      if ('data' in result) {
+        console.log('Déconnexion réussie');
+        localStorage.removeItem('accessToken');
+        setAccessToken(null);
+        handleCloseMenu();
+      } else {
+        console.error('La déconnexion a échoué:', result.error);
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
     }
-
-    
   };
-  useEffect(() => {
-    const storedToken = localStorage.getItem('accessToken');
-    const username = localStorage.getItem('username')
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const openMenu = Boolean(anchorEl);
+  const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
 
+  useEffect(() => {
+ 
+    const storedToken = localStorage.getItem('accessToken');
     if (storedToken) {
-      setUsername(username);
-      
-      try {
-        setAccessToken(storedToken);
-        console.log('Token décodé avec succès');
-      } catch (error) {
-        console.error('Erreur lors du décodage du token :', error);
+      setAccessToken(storedToken);
+
+     
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        setUsername(user.username);
       }
     }
   }, []);
+
   
   return (
-<AppBar position="static" sx={{ display: 'flex', alignItems: 'center' ,background:'#3B556D' }}>
+    <AppBar position="static" sx={{ display: 'flex', alignItems: 'center', background: '#3B556D' }}>
       <Container maxWidth="xl" >
         <Toolbar disableGutters  >
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -117,6 +132,7 @@ function NavBar() {
           >
             LOGO
           </Typography>
+          
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -186,11 +202,11 @@ function NavBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            
-          
-        
-                
-           
+
+
+
+
+
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -215,106 +231,166 @@ function NavBar() {
             </Menu>
           </Box>
           <div className='div-sign'>
-          {accessToken ? (
-        // Si accessToken est présent, affiche le bouton de déconnexion
-        <>
-         <span>{username}</span>
-         <Button
-          onClick={handleLogout}
-          sx={{
-            backgroundColor: '#5FC2BA',
-            color: 'white',
-            padding: '10px 20px',
-            marginLeft: '20px',
-            fontWeight: '500',
-            border: 'solid #5FC2BA 1px',
-            '&:hover': {
-              backgroundColor: '#3B556D',
-              color: '#5FC2BA',
+            {accessToken ? (
+              // Si accessToken est présent, affiche le bouton de déconnexion
+              <>
+                <span>{username}</span>
+                <Tooltip title="Account settings">
+          <IconButton
+            onClick={handleClickMenu}
+            size="small"
+            sx={{ ml: 2 }}
+            aria-controls={openMenu ? 'account-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={openMenu ? 'true' : undefined}
+          >
+            <Avatar sx={{ width: 32, height: 32 }}>
+            {username ? username[0].toUpperCase() : ''}
+          </Avatar>
+          </IconButton>
+        </Tooltip>
+                <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={openMenu}
+        onClose={handleCloseMenu}
+        onClick={handleCloseMenu}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+            '& .MuiAvatar-root': {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
             },
-          }}
-        >
+            '&::before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <MenuItem onClick={handleCloseMenu}>
+          <Avatar /> Profile
+        </MenuItem>
+        <MenuItem onClick={handleCloseMenu}>
+          <Avatar /> My account
+        </MenuItem>
+        <Divider />
+        <MenuItem onClick={handleCloseMenu}>
+          <ListItemIcon>
+            <PersonAdd fontSize="small" />
+          </ListItemIcon>
+          Add another account
+        </MenuItem>
+        <MenuItem onClick={handleCloseMenu}>
+          <ListItemIcon>
+            <Settings fontSize="small" />
+          </ListItemIcon>
+          Settings
+        </MenuItem>
+        <MenuItem  onClick={handleLogout}>
+          <ListItemIcon   >
+            <Logout fontSize="small" />
+          </ListItemIcon >
           Logout
-        </Button>
-       
-        </>
-       
-      ) : (
-        // Sinon, affiche les boutons de connexion et d'inscription
-        <>
-          <Button
-            component={Link}
-            to="/login"
-            sx={{
-              backgroundColor: '#3B556D',
-              color: '#5FC2BA',
-              padding: '10px 20px',
-              fontWeight: '500',
-              border: 'solid white 1px',
-              '&:hover': {
-                backgroundColor: '#5FC2BA',
-                color: 'white',
-                border: 'solid #3B556D 1px',
-              },
-            }}
-          >
-            Login
-          </Button>
-          <Button
-            onClick={handleClickOpen}
-            sx={{
-              backgroundColor: '#5FC2BA',
-              color: 'white',
-              padding: '10px 20px',
-              marginLeft: '20px',
-              fontWeight: '500',
-              border: 'solid #5FC2BA 1px',
-              '&:hover': {
-                backgroundColor: '#3B556D',
-                color: '#5FC2BA',
-              },
-            }}
-          >
-            Sign up
-          </Button>
-        </>
-      )}
-                </div>
-     
+        </MenuItem>
+      </Menu>
+               
+
+              </>
+
+            ) : (
+              // Sinon, affiche les boutons de connexion et d'inscription
+              <>
+                <Button
+                  component={Link}
+                  to="/login"
+                  sx={{
+                    backgroundColor: '#3B556D',
+                    color: '#5FC2BA',
+                    padding: '10px 20px',
+                    fontWeight: '500',
+                    border: 'solid white 1px',
+                    '&:hover': {
+                      backgroundColor: '#5FC2BA',
+                      color: 'white',
+                      border: 'solid #3B556D 1px',
+                    },
+                  }}
+                >
+                  Login
+                </Button>
+                <Button
+                  onClick={handleClickOpen}
+                  sx={{
+                    backgroundColor: '#5FC2BA',
+                    color: 'white',
+                    padding: '10px 20px',
+                    marginLeft: '20px',
+                    fontWeight: '500',
+                    border: 'solid #5FC2BA 1px',
+                    '&:hover': {
+                      backgroundColor: '#3B556D',
+                      color: '#5FC2BA',
+                    },
+                  }}
+                >
+                  Sign up
+                </Button>
+              </>
+            )}
+          </div>
+
         </Toolbar>
-      
+
       </Container>
+      
       <Dialog
         open={open}
         onClose={handleClose}
         PaperComponent={PaperComponent}
       >
-<Dialog
-  open={open}
-  onClose={handleClose}
-  PaperComponent={(props) => (
-    <div className='dialog-signup'>
-    <h2> Sign Up</h2>
- <div className='dialog-signup-item'>
- <div>
-  <img src="/image/offr.jpg" width={"120px"} alt="" />
-  <h3>demandeurs</h3>
-  <p>Lorem eprehenderit untae autem! Tenetur, dolorem.</p>
-  <Link className='abutton1' to="/signup/demandeur"  onClick={handleClose}>Commencer</Link>
-</div>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          PaperComponent={(props) => (
+            <div className='dialog-signup'>
+              <h2> Sign Up</h2>
+              <div className='dialog-signup-item'>
+                <div>
+                  <img src="/image/offr.jpg" width={"120px"} alt="" />
+                  <h3>demandeurs</h3>
+                  <p>Lorem eprehenderit untae autem! Tenetur, dolorem.</p>
+                  <Link className='abutton1' to="/signup/demandeur" onClick={handleClose}>Commencer</Link>
+                </div>
 
-<div>
-  <img src="/image/deman.jpg" width={"120px"} alt="" />
-  <h3>offreurs</h3>
-  <p>Lorem ipsum doloexercittae autem! Tenetur, dolorem.</p>
-  <Link className='abutton2' to="/signup/offreur"  onClick={handleClose}>Commencer</Link>
-</div>
- </div>
- </div>
-  )}
->
-  
-</Dialog>
+                <div>
+                  <img src="/image/deman.jpg" width={"120px"} alt="" />
+                  <h3>offreurs</h3>
+                  <p>Lorem ipsum doloexercittae autem! Tenetur, dolorem.</p>
+                  <Link className='abutton2' to="/signup/offreur" onClick={handleClose}>Commencer</Link>
+                </div>
+              </div>
+            </div>
+          )}
+        >
+
+        </Dialog>
       </Dialog>
     </AppBar>
   );
