@@ -19,7 +19,7 @@ export default function SplitPage() {
     return (
       <section className='sectionSplit'>
         <div>
-            <h1>Bienvenue sur notre Plateforme de Services Collaboratifs ! </h1>
+            <h1>Bienvenue sur notre Plateforme d'offreurs et de demandeurs de services! </h1>
             <p>Découvrez une nouvelle dimension de l'échange de services entre donneurs et offreurs sur notre plateforme dédiée à la collaboration et à la réalisation de vos projets.  </p>
           <div className='div-search'>
           <SearchBar className='searchbar'

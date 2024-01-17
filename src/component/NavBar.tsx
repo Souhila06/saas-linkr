@@ -1,4 +1,5 @@
 import { useState, useEffect, useLayoutEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -23,6 +24,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { useLogoutMutation } from '../services/authApi';
 import { PersonAdd, Settings, Logout } from '@mui/icons-material';
 import { Avatar, Divider, ListItemIcon, Tooltip } from '@mui/material';
+import logo from './logo.png';
 
 const pages = ['Acceuil', 'Nos Service', 'A propos', 'Notre Communauté', 'Avis Clients'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -68,14 +70,16 @@ function NavBar() {
   const handleClose = () => {
     setOpen(false);
   };
-
+  const navigate = useNavigate();
   const handleLogout = async () => {
     try {
       const result = await logout({});
+     
 
       if ('data' in result) {
         console.log('Déconnexion réussie');
         localStorage.removeItem('accessToken');
+        navigate('/login');
         setAccessToken(null);
         handleCloseMenu();
       } else {
@@ -114,7 +118,17 @@ function NavBar() {
     <AppBar position="static" sx={{ display: 'flex', alignItems: 'center', background: '#3B556D' }}>
       <Container maxWidth="xl" >
         <Toolbar disableGutters  >
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+        <img
+  src={logo}
+  alt="Votre photo"
+  style={{
+    display: 'flex',
+    marginRight: '1px',
+    width: '100px',
+    height: 'auto',
+  }}
+/>
+
           <Typography
             variant="h6"
             noWrap
@@ -130,7 +144,7 @@ function NavBar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+        
           </Typography>
           
 

@@ -32,8 +32,8 @@ export default function Projet() {
     { id: 1, titre: 'Site Web', client: 'Souhila', dateDebut: '30-07-2023', dateLimite: '30-09-2023', progression: 'En cours' },
     { id: 2, titre: 'apk', client: 'Souhila', dateDebut: '30-07-2023', dateLimite: '30-09-2023', progression: 'En cour' },
     { id: 3, titre: 'logiciel', client: 'Souhila', dateDebut: '30-07-2023', dateLimite: '30-09-2023', progression: 'En cour' },
-    { id: 4, titre: 'Site Web', client: 'Souhila', dateDebut: '30-07-2023', dateLimite: '30-09-2023', progression: 'En cour' },
-    { id: 5, titre: 'Site Web', client: 'Souhila', dateDebut: '30-07-2023', dateLimite: '30-09-2023', progression: 'En cour' },
+    { id: 4, titre: 'maquette', client: 'Souhila', dateDebut: '30-07-2023', dateLimite: '30-09-2023', progression: 'En cour' },
+    { id: 5, titre: 'interface', client: 'Souhila', dateDebut: '30-07-2023', dateLimite: '30-09-2023', progression: 'En cour' },
     { id: 6, titre: 'Site Web', client: 'Souhila', dateDebut: '30-07-2023', dateLimite: '30-09-2023', progression: 'En cour' },
     { id: 7, titre: 'Site Web', client: 'Souhila', dateDebut: '30-07-2023', dateLimite: '30-09-2023', progression: 'En cour' },
     { id: 8, titre: 'Site Web', client: 'Souhila', dateDebut: '30-07-2023', dateLimite: '30-09-2023', progression: 'En cour' },
@@ -119,6 +119,7 @@ export default function Projet() {
               onClose={handleEditClose}
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
+              
             >
               <Box sx={style}>
                 <EditForm closeEvent={handleEditClose} rowData={rowData} updateUser={updateUserFunction} />
@@ -135,7 +136,7 @@ export default function Projet() {
               onChange={(e, v) => filterData(v)}
               renderInput={(params) => <TextField {...params} size="small" label="Recherche " />}
             />
-            <Button
+            {/* <Button
               variant="contained"
               endIcon={<AddCircleIcon />}
               onClick={handleOpen}
@@ -153,7 +154,7 @@ export default function Projet() {
               }}
             >
               Ajouter
-            </Button>
+            </Button> */}
           </div>
           <DataTable rows={rows} columns={columns} onRowClick={handleClickGetData} />
         </div>

@@ -7,6 +7,7 @@ import { LocalizationProvider, DateCalendar } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Box, Button, Paper, Step, StepContent, StepLabel, createTheme, Stepper, ThemeProvider, Typography } from "@mui/material";
 import { GridColDef } from '@mui/x-data-grid/models/colDef/gridColDef';
+import logo from '../logo.png';
 
 
 const theme = createTheme({
@@ -34,6 +35,7 @@ const steps = [
 
     },
 ];
+
 interface SuivreDemandeProps {
     demande: {
         id: number;
@@ -49,16 +51,92 @@ const SuivreDemande: React.FC<SuivreDemandeProps> = ({
 }) => {
     const [activeStep, setActiveStep] = React.useState(0);
 
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
+    // const handleNext = () => {
+    //     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    // };
 
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
+    // const handleBack = () => {
+    //     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    // };
 
-    const handleReset = () => {
-        setActiveStep(0);
+    // const handleReset = () => {
+    //     setActiveStep(0);
+    // };
+    
+    const getCurrentDate = () => {
+        const currentDate = new Date();
+        return currentDate.toISOString().split('T')[0];
+    };
+    
+    const getDueDate = () => {
+        const currentDate = new Date();
+        const dueDate = new Date(currentDate.setDate(currentDate.getDate() + 30));
+        return dueDate.toISOString().split('T')[0];
+    };
+    const generateInvoice = () => {
+        const pdf = new jsPDF();
+      
+        pdf.setFontSize(25);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Facture', 95, 25);
+    
+        pdf.addImage(logo, 'PNG', 90, 30, 40, 40); 
+      
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'normal');
+        
+        // Utilisation de valeurs par défaut
+        const currentDate = getCurrentDate();
+        const dueDate = getDueDate();
+        const clientName = "souhila";
+        const clientAddress = "souhila";
+        const clientPhone = "souhila";
+    
+        pdf.text(`Date: ${currentDate}`, 150, 70);
+        pdf.text(`Due Date: ${dueDate}`, 150, 80);
+    
+        pdf.text('Bill To:', 10, 90);
+        pdf.text(`Nom client: ${clientName}`, 10, 100);
+        pdf.text(`Adresse: ${clientAddress}`, 10, 110);
+        pdf.text(`Tel: ${clientPhone}`, 10, 120);
+    
+        let yOffset1 = 140;
+    
+        pdf.setFontSize(14);
+        pdf.text('Description', 10, yOffset1);
+        pdf.text('Unité', 80, yOffset1);
+        pdf.text('Prix', 160, yOffset1);
+    
+        let totalAmount = 0;
+        let yOffset = 150;
+        const lineHeight = 3;
+        const price = 50; // Exemple de prix par défaut
+        pdf.line(10, yOffset1 + lineHeight, 190, yOffset1 + lineHeight);
+        const items = [
+            { description: 'Item 1', unite: 1, prix: price },
+            // Ajoutez d'autres articles si nécessaire
+        ];
+    
+        pdf.line(10, yOffset + lineHeight, 190, yOffset + lineHeight);
+        
+        items.forEach(item => {
+            const itemTotal = item.unite * Number(item.prix);
+            totalAmount += itemTotal;
+    
+            pdf.text(item.description, 10, yOffset);
+            pdf.text(item.unite.toString(), 80, yOffset);
+            pdf.text(`$${itemTotal.toFixed(2)}`, 160, yOffset);
+            pdf.line(10, yOffset + lineHeight, 190, yOffset + lineHeight);
+    
+            yOffset += 10;
+        });
+    
+        pdf.setFontSize(12);
+        pdf.text('Total Amount:', 120, yOffset + 10);
+        pdf.text(`$${totalAmount.toFixed(2)}`, 160, yOffset + 10);
+        pdf.line(120, yOffset + 13, 190, yOffset + 13);
+    
+        pdf.save('invoice.pdf');
     };
     const [selectedDemande, setSelectedDemande] = useState<{
         id: number;
@@ -82,6 +160,7 @@ const SuivreDemande: React.FC<SuivreDemandeProps> = ({
         }
     };
       
+    
       
     return (
         <> <Navdashboard />
@@ -150,7 +229,7 @@ const SuivreDemande: React.FC<SuivreDemandeProps> = ({
                                         <StepContent>
 
                                             <Box sx={{ mb: 2 }}>
-                                                <div>
+                                                {/* <div>
 
                                                     <Button
                                                         variant="contained"
@@ -166,7 +245,7 @@ const SuivreDemande: React.FC<SuivreDemandeProps> = ({
                                                     >
                                                         Back
                                                     </Button>
-                                                </div>
+                                                </div> */}
                                             </Box>
                                         </StepContent>
                                     </Step>
@@ -175,9 +254,9 @@ const SuivreDemande: React.FC<SuivreDemandeProps> = ({
                             {activeStep === steps.length && (
                                 <Paper square elevation={0} sx={{ p: 3 }}>
                                     <Typography>All steps completed - you&apos;re finished</Typography>
-                                    <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+                                    {/* <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
                                         Reset
-                                    </Button>
+                                    </Button> */}
                                 </Paper>
                             )}
                         </Box>
@@ -207,7 +286,14 @@ const SuivreDemande: React.FC<SuivreDemandeProps> = ({
                     <div>
                         <div>
                             <span>Télécharger la facture</span>
-                            <a href="">PDF</a>
+                            <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={generateInvoice}
+                                        style={{ marginTop: '10px', backgroundColor: '#3B556D', color: 'white' }}
+                                    >
+                                        PDF
+                                    </Button>
                         </div>
                         <a href="">Payer</a>
                     </div>

@@ -17,6 +17,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { InputLabel } from '@mui/material';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react'
+import { SerializedError } from '@reduxjs/toolkit/';
 
 
 
@@ -92,8 +95,16 @@ const defaultTheme = createTheme({
     },
   },
 });
+interface User {
+  username: string;
+  email: string;
+  role: string;
+}
 
-
+interface LoginResponse {
+  data?: { token: string, user: User };
+  error?: FetchBaseQueryError | SerializedError;
+}
 
 
 const countries = [
@@ -114,9 +125,13 @@ const SignUp: React.FC<SignUpProps> = ({ role }) => {
   //   console.log('username:', username);
   //   console.log('Email:', email);
   //   console.log('Password:', password);
-  
+
   // };
   const [selectedCountry, setSelectedCountry] = React.useState('');
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+
+
 
   const [username, setusername] = useState('');
   // const [lastName, setLastName] = useState('');
@@ -129,32 +144,62 @@ const SignUp: React.FC<SignUpProps> = ({ role }) => {
       data: registerData,
       isSuccess: isRegisterSuccess,
       isError: isRegisterError,
-      error:registerError,
+      error: registerError,
     }
   ] = useRegisterUserMutation();
 
   const handleRegister = async () => {
     if (username && password && email && (role === "demandeur" || role === "offreur")) {
-      await registerUser({
+      const response = await registerUser({
         username,
         email,
         password,
         role,
       });
+      if ('data' in response) {
+        if (response.data.accessToken) {
+          const token = response.data.accessToken;
+          const user = response.data.user;
+
+
+          const username = user.username;
+          const email = user.email;
+          const role = user.role;
+
+          localStorage.setItem('accessToken', token);
+          localStorage.setItem('user', JSON.stringify(user));
+
+          console.log('Utilisateur enregistré avec succès.');
+        } else {
+          console.log('Erreur lors de l\'enregistrement : pas de jeton d\'accès.');
+        }
+      } else {
+        console.log('Erreur lors de l\'enregistrement : la propriété \'data\' n\'existe pas dans la réponse.');
+      }
     } else {
-      
       console.log('Veuillez remplir les champs requis');
-   
     }
   };
 
+  const navigate = useNavigate();
   React.useEffect(() => {
     if (isRegisterSuccess) {
       
-      console.log('register  réussie');
-      
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        navigate("/");
+      }, 8000);
+    } else {
+      // Afficher un message d'erreur si l'inscription échoue
+      setShowErrorMessage(true);
+      setTimeout(() => {
+        setShowErrorMessage(false);
+      }, 8000);
     }
-  }, [isRegisterSuccess]);
+  }, [isRegisterSuccess, navigate]);
+
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="sm" style={{ marginBottom: '70px', marginTop: '70px', paddingBottom: '30px', border: '1px solid black', borderRadius: '20px' }}>
@@ -232,7 +277,7 @@ const SignUp: React.FC<SignUpProps> = ({ role }) => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
-             
+
               {/* <Grid item xs={12}>
               <FormControl fullWidth sx={{ '& .MuiOutlinedInput-notchedOutline': { borderColor: '#3B556D !important' } }}>
               <InputLabel id="demo-simple-select-label" sx={{ color: '#000000' }}>Country</InputLabel>
@@ -263,26 +308,40 @@ const SignUp: React.FC<SignUpProps> = ({ role }) => {
               </Grid>
             </Grid>
             <Button
-           
+
               fullWidth
+              id='sign-btn'
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={()=>handleRegister()}
+              onClick={() => handleRegister()}
             >
               Sign Up
             </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2" style={{ color: '#000000' }}>
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
+            {showSuccessMessage && (
+              <div style={{ color: 'green' }}>
+                User created successfully. Please check your email
+              </div>
+            )}
+            {showErrorMessage && (
+              <div style={{ color: 'red' }}>
+                Registration failed. Please try again.
+              </div>
+            )}
+          
 
-      </Container>
-    </ThemeProvider>
+
+          <Grid container justifyContent="flex-end">
+            <Grid item>
+              <Link href="#" variant="body2" style={{ color: '#000000' }}>
+                Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+
+    </Container>
+    </ThemeProvider >
   );
 }
 

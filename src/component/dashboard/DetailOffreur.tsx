@@ -11,7 +11,7 @@ import AddForm from './AddFormProjet';
 import CloseIcon from '@mui/icons-material/Close';
 import { PDFViewer } from '@react-pdf/renderer';
 import { useParams } from 'react-router-dom';
-import fleur from './fleur.png';
+import logo from '../logo.png';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import htmlToPdfmake from 'html-to-pdfmake';
@@ -146,33 +146,40 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
         }
     };
 
+    const getCurrentDate = () => {
+        const currentDate = new Date();
+        return currentDate.toISOString().split('T')[0];
+    };
+    
+    const getDueDate = () => {
+        const currentDate = new Date();
+        const dueDate = new Date(currentDate.setDate(currentDate.getDate() + 30));
+        return dueDate.toISOString().split('T')[0];
+    };
+    
+    // Your generateInvoice function
     const generateInvoice = () => {
         const pdf = new jsPDF();
-    
       
         pdf.setFontSize(25);
         pdf.setFont('helvetica', 'bold');
         pdf.text('Facture', 95, 25);
-
-        pdf.addImage(fleur, 'PNG', 90, 30, 40, 40); 
     
-     
+        pdf.addImage(logo, 'PNG', 90, 30, 40, 40); 
+      
         pdf.setFontSize(12);
         pdf.setFont('helvetica', 'normal');
-
         
         pdf.text(`Date: ${getCurrentDate()}`, 150, 70);
         pdf.text(`Due Date: ${getDueDate()}`, 150, 80);
     
- 
         pdf.text('Bill To:', 10, 90);
         pdf.text(`Nom client: ${clientName}`, 10, 100);
         pdf.text(`Adresse: ${clientName}`, 10, 110);
         pdf.text(`Tel: ${clientName}`, 10, 120);
-
-        
+    
         let yOffset1 = 140;
-
+    
         pdf.setFontSize(14);
         pdf.text('Description', 10, yOffset1);
         pdf.text('Unité', 80, yOffset1);
@@ -181,52 +188,36 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
         let totalAmount = 0;
         let yOffset = 150;
         const lineHeight = 3;
-        const price: string | number = priceDemand; // Ensure priceDemand is assigned a value
+        const price = priceDemand || 0; // Ensure priceDemand is assigned a value
         pdf.line(10, yOffset1 + lineHeight, 190, yOffset1 + lineHeight);
         const items = [
-            { description: 'Item 1', unite: 1, prix: price || 0 },
-           
+            { description: 'Item 1', unite: 1, prix: price },
         ];
         
         pdf.line(10, yOffset + lineHeight, 190, yOffset + lineHeight);
         
         items.forEach(item => {
-          
+            
             const itemTotal = item.unite * Number(item.prix);
             totalAmount += itemTotal;
         
             pdf.text(item.description, 10, yOffset);
             pdf.text(item.unite.toString(), 80, yOffset);
-            // pdf.text(`$${item.prix.toFixed(2)}`, 120, yOffset); 
             pdf.text(`$${itemTotal.toFixed(2)}`, 160, yOffset);
             pdf.line(10, yOffset + lineHeight, 190, yOffset + lineHeight);
         
             yOffset += 10;
         });
         
-      
-      
         pdf.setFontSize(12);
         pdf.text('Total Amount:', 120, yOffset + 10);
         pdf.text(`$${totalAmount.toFixed(2)}`, 160, yOffset + 10);
         pdf.line(120, yOffset + 13, 190, yOffset + 13);
     
-   
         pdf.save('invoice.pdf');
     };
     
-
-    const getCurrentDate = () => {
-        const currentDate = new Date();
-        return currentDate.toISOString().split('T')[0];
-    };
-    
-  
-    const getDueDate = () => {
-        const currentDate = new Date();
-        const dueDate = new Date(currentDate.setDate(currentDate.getDate() + 30));
-        return dueDate.toISOString().split('T')[0];
-    };
+   
     
     const handleDateChange = (event: ChangeEvent<HTMLInputElement>) => {
         setSelectedDate(event.target.value);
@@ -536,6 +527,7 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                                                     setIdDemande(e.target.value)
                                                 }
                                                 sx={{
+                                                    minWidth: '100%',
                                                     '& .MuiInputLabel-root': {
                                                         color: '#3B556D',
                                                     },
@@ -546,10 +538,12 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                                                         borderColor: '#3B556D',
                                                     },
                                                     '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                        borderColor: '#3B556D',
+                                                        borderColor: '#3B556D !important', // Utilisation de !important pour forcer la priorité
+                                                    },
+                                                    '& .Mui-focused .MuiInputLabel-root': {
+                                                        color: '#3B556D !important',
                                                     },
                                                 }}
-
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
@@ -562,6 +556,7 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                                                     setClientName(e.target.value)
                                                 }
                                                 sx={{
+                                                    minWidth: '100%',
                                                     '& .MuiInputLabel-root': {
                                                         color: '#3B556D',
                                                     },
@@ -572,7 +567,10 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                                                         borderColor: '#3B556D',
                                                     },
                                                     '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                        borderColor: '#3B556D',
+                                                        borderColor: '#3B556D !important', // Utilisation de !important pour forcer la priorité
+                                                    },
+                                                    '& .Mui-focused .MuiInputLabel-root': {
+                                                        color: '#3B556D !important',
                                                     },
                                                 }}
 
@@ -588,21 +586,25 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                                                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                                     setPriceDemand(e.target.value)
                                                 }
-                                                sx={{
-                                                    '& .MuiInputLabel-root': {
-                                                        color: '#3B556D',
-                                                    },
-                                                    '& .MuiOutlinedInput-notchedOutline': {
-                                                        borderColor: '#3B556D',
-                                                    },
-                                                    '&:hover .MuiOutlinedInput-notchedOutline': {
-                                                        borderColor: '#3B556D',
-                                                    },
-                                                    '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                        borderColor: '#3B556D',
-                                                    },
-                                                }}
-
+                                               
+                                                    sx={{
+                                                        minWidth: '100%',
+                                                        '& .MuiInputLabel-root': {
+                                                            color: '#3B556D',
+                                                        },
+                                                        '& .MuiOutlinedInput-notchedOutline': {
+                                                            borderColor: '#3B556D',
+                                                        },
+                                                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                            borderColor: '#3B556D',
+                                                        },
+                                                        '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                            borderColor: '#3B556D !important', // Utilisation de !important pour forcer la priorité
+                                                        },
+                                                        '& .Mui-focused .MuiInputLabel-root': {
+                                                            color: '#3B556D !important',
+                                                        },
+                                                    }}
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
@@ -746,4 +748,4 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
     );
 };
 
-export default DetailOffreur;
+export default DetailOffreur ;

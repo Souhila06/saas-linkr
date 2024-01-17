@@ -26,6 +26,8 @@ import DetailOffreur from "./component/dashboard/DetailOffreur";
 import PrivateRoute from "./PrivateRoute";
 import VerifyEmail from "./component/VerifyEmail"
 import ProfileDemandeur from "./component/ProfileDemandeur"
+import NotFound  from "./component/NotFound"
+
 
 
 
@@ -63,7 +65,7 @@ function App() {
         />
 
 
-        <Route path="/offreur/dashboard" element={<Dashboard />} />
+       
         <Route path="/offreur/evenement" element={<Evenement />} />
         <Route path="/offreur/client" element={<Client />} />
         <Route path="/offreur/projet" element={<Projet />} />
@@ -83,6 +85,9 @@ function App() {
 
 
         <Route path="/verifyemail" element={<VerifyEmail />} />
+
+        
+        <Route path="/notfound" element={<NotFound />} />
         
         <Route
           path="/profildemandeur"

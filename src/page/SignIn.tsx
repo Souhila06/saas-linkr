@@ -75,7 +75,7 @@ const initialState = {
 
 };
 
-interface User {
+export interface User {
   username: string;
   email: string;
   role: string;
@@ -102,6 +102,7 @@ export default function SignIn() {
     }
   ] = useLoginUserMutation();
 
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [forgotPassword] = useForgotPasswordMutation();
   const handleLogin = async () => {
     if (!showForgotPassword && (username && password)) {
@@ -120,12 +121,9 @@ export default function SignIn() {
         
         localStorage.setItem('accessToken', token);
         localStorage.setItem('user', JSON.stringify(user));
-      
+      console.log(response.data);
 
-        setShowAlert(true);
-        setTimeout(() => {
-          setShowAlert(false);
-        }, 3000); 
+      
       } else {
         setShowErrorAlert(true);
       setTimeout(() => {
@@ -140,8 +138,6 @@ export default function SignIn() {
         
       
 
-  const [showAlert, setShowAlert] = useState(false);
-  const [showErrorAlert, setShowErrorAlert] = useState(false);
 
   React. useEffect(() => {
     if (isLoginSuccess) {
@@ -261,13 +257,9 @@ export default function SignIn() {
               </Grid>
             </Grid>
           )}
-           
-           {!showForgotPassword && (
-            <div style={{ display: showAlert ? 'block' : 'none', marginTop: '10px', padding: '10px', backgroundColor: 'green', color: 'white', borderRadius: '5px' }}>
-              User login Successfully
-            </div>
-          )}
-          {!showForgotPassword && (
+          
+          
+          {showErrorAlert && (
             <div style={{ display: showErrorAlert ? 'block' : 'none', marginTop: '10px', padding: '10px', backgroundColor: 'red', color: 'white', borderRadius: '5px' }}>
               Connexion échouée
             </div>

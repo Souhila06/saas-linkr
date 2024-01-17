@@ -46,7 +46,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, allowedRoles }) =
     }
     if (allowedRoles && !allowedRoles.includes(user.role)) {
         console.log('User does not have the required role. User object:', user);
-        return <Navigate to="/" replace />;
+        return <Navigate to="/notfound" replace />;
     }
 
     return <>{children}</>;
