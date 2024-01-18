@@ -274,31 +274,31 @@ const ServiceOffer: React.FC = () => {
           <div style={{ }}> 
            <div style={{ display: 'flex',alignItems: 'center', justifyContent: 'center' , gap: '20px'}}>
            <TextField
-              label="Enter Name"
+              label="Enter First Name"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{ outline: 'none' }}
             />
              <TextField
-              label="Enter Name"
+              label="Enter Last Name"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{ outline: 'none' }}
             />
              <TextField
-              label="Enter Name"
+              label="Enter Description"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{ outline: 'none' }}
             />
              <TextField
-              label="Enter Name"
+              label="Enter Country"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{ outline: 'none' }}
             />
              <TextField
-              label="Enter Name"
+              label="Enter City"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{ outline: 'none' }}

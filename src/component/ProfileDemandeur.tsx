@@ -19,7 +19,6 @@ interface Demandeur {
   city: string;
   zip: string;
   country: string;
-  user: Omit<User, "email" | "password" | "role">;
 }
 
 const defaultTheme = createTheme({
@@ -166,7 +165,8 @@ const [isDemandeurNotNull, setIsDemandeurNotNull] = useState<boolean>(userDemand
     try {
       const response: Response = await createDemandeurMutation(demandeurInfo);
       // repmlcer nouvelle valeu de demandeur dans local storage 
-      user.demandeur = response.data;
+      user.demandeur = { ...response.data, user: undefined };
+      console.log(user.demandeur );
       localStorage.setItem('user', JSON.stringify(user));
       
       console.log(user)
@@ -186,17 +186,21 @@ const [modifyDemandeurMutation, { data, error }] = useModifyDemandeurMutation();
 
 const handleModify = async () => {
   try {
-  
+    const storedUser1 = localStorage.getItem('user');
+      let userstore = storedUser1 ? JSON.parse(storedUser1) : null;
+    console.log(  userstore.demandeur.id )
+      demandeurInfo.id = userstore.demandeur.id;
        
     const response = await modifyDemandeurMutation(demandeurInfo);
+    console.log(demandeurInfo)
 
     console.log(response)
     if (data) {
    
       
       // Mise à jour des informations dans le localStorage 
-      // user.demandeur = modifiedDemandeur;
-      // localStorage.setItem('user', JSON.stringify(user));
+      user.demandeur = demandeurInfo;
+      localStorage.setItem('user', JSON.stringify(user));
 
       console.log('Demandeur modifié avec succès:', data);
     } else if (error) {

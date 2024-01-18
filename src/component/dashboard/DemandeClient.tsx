@@ -6,7 +6,7 @@ import DataTable from "./Datatable";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import DateTabledemande from "../dashDemandeur/DateTabledemande";
 import jsPDF from 'jspdf';
-
+import pdfUrl from './cahier.pdf'
 import { Link } from 'react-router-dom';
 
 
@@ -73,16 +73,7 @@ export default function Client() {
     dateenvoie: string;
     client: string;
   }) => {
-    if (selectedData) {
-      const pdf = new jsPDF();
-  
-      // Example of conditional check
-      if (selectedData.cahierDeCharge) {
-        pdf.text(`Cahier de charge : ${selectedData.cahierDeCharge}`, 10, 40);
-      }
-  
-      pdf.save('demande_info.pdf');
-    }
+    window.open(pdfUrl, '_blank');
   };
 
   return (
