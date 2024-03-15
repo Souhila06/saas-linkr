@@ -9,6 +9,7 @@ import NavBar from '../component/NavBar';
 import StarIcon from '@mui/icons-material/Star';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import { Link } from 'react-router-dom';
 
 
 import { useListOffreursQuery } from '../services/authApi';
@@ -91,7 +92,7 @@ const defaultTheme = createTheme({
 
 
 interface CustomCardProps {
-
+  id: number;
   fname: string;
   lname: string;
   apropos: string;
@@ -137,8 +138,9 @@ const responsive = {
   }
 };
 
-const CustomCard: React.FC<CustomCardProps> = ({ fname, lname, apropos, skills, city, country, zip, _count }) => (
-  <Card sx={{ height: '100%' }}>
+const CustomCard: React.FC<CustomCardProps> = ({id, fname, lname, apropos, skills, city, country, zip, _count }) => {
+  const offreur = {id ,fname, lname, apropos, skills, city, country, zip, _count};
+  return(<Card sx={{ height: '100%' }}>
     <CardMedia
       sx={{ height: 140 }}
       image="/static/images/cards/contemplative-reptile.jpg"
@@ -173,13 +175,18 @@ const CustomCard: React.FC<CustomCardProps> = ({ fname, lname, apropos, skills, 
     </CardContent>
 
     <CardActions>
-      <Button size="small" style={{ color: 'black' }}>
-        Show More
-      </Button>
+    <Button
+      size="small"
+      style={{ color: 'black' }}
+      component={Link}
+      to={`/offreurProfile/${id}`}
+    >
+      Show More
+    </Button>
     </CardActions>
   </Card>
-  
-);
+  )
+        };
 interface Offreur {
   id: number;
   fname: string;
@@ -262,6 +269,7 @@ const ServiceOffer: React.FC = () => {
     setFilteredOfferors(filteredData);
   };
 
+  
   return (
     <>
       <NavBar />
@@ -317,6 +325,7 @@ const ServiceOffer: React.FC = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridGap: '10px', gridAutoRows: 'minmax(100px, auto)', paddingTop: '50px', paddingBottom: '50px' }}> {(filteredOfferors.length > 0 ? filteredOfferors : allOfferors).map((offreur) => (
             <Grid item key={offreur.id} xs={12} sm={6} md={4} lg={10}>
               <CustomCard
+                id={offreur.id}
                 apropos={offreur.apropos}
                 fname={offreur.fname}
                 lname={offreur.lname}

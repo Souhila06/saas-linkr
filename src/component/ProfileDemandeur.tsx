@@ -117,7 +117,6 @@ const ProfileDemandeur: React.FC = () => {
   };
 
 
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -156,7 +155,10 @@ const ProfileDemandeur: React.FC = () => {
   }, [listDemandeurs, listDemandeursError]);
   let userString = localStorage.getItem('user');
   let user = userString ? JSON.parse(userString) : null;
-  const userDemandeurNotNull = user && user.demandeur !== null;
+  const userDemandeurNotNull = user.demandeur !== null;
+  console.log(user)
+  console.log(user.demandeur)
+  
 
 const [isDemandeurNotNull, setIsDemandeurNotNull] = useState<boolean>(userDemandeurNotNull);
   // create demandeur 
@@ -240,6 +242,7 @@ const handleModify = async () => {
 
           localStorage.setItem('user', JSON.stringify(user));
         } else {
+          
           console.error('Erreur lors de la suppression du demandeur:', response.error);
         }
       } catch (error) {

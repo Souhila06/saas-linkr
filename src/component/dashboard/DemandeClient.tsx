@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidenav from './Sidenav';
 import { Autocomplete, Button, TextField, Typography } from "@mui/material";
 import Navdahboard from "./Navdahboard";
@@ -8,12 +8,13 @@ import DateTabledemande from "../dashDemandeur/DateTabledemande";
 import jsPDF from 'jspdf';
 import pdfUrl from './cahier.pdf'
 import { Link } from 'react-router-dom';
+import { useListDemandeQuery } from "../../services/authApi";
 
 
 export default function Client() {
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'titre', headerName: 'Titre', width: 130 },
+    { field: 'title', headerName: 'Titre', width: 130 },
     { field: 'cahierDeCharge', headerName: 'cahier De Charge', width: 200 },
     { field: 'description', headerName: 'Description', width: 95 },
     { field: 'dateenvoie', headerName: 'Date Envoie', width: 95 },
@@ -23,11 +24,7 @@ export default function Client() {
   ];
 
   const initialRows = [
-    { id: 1, titre: 'site web', cahierDeCharge: 'cahier.pdf', description: 'site web ecommerce', dateenvoie: '12 Octobre 2001', client: 'mayes' },
-    { id: 2, titre: 'apk', cahierDeCharge: 'cahier.pdf', description: 'application mobile', dateenvoie: '12 Octobre 2001', client: 'hadjer' },
-    { id: 3, titre: 'logiciel', cahierDeCharge: 'cahier.pdf', description: 'Logiciel', dateenvoie: '12 Octobre 2001', client: 'dagi' },
-    { id: 4, titre: 'site', cahierDeCharge: 'cahier.pdf', description: 'site', dateenvoie: '12 Octobre 2001', client: 'sssss' },
-    { id: 5, titre: 'maquette', cahierDeCharge: 'cahier.pdf', description: 'maquette', dateenvoie: '12 juillet 2001', client: 'yyyyy' },
+    { id: 1, title: '', cc: '', description: '', date_emission: '', demandeur: {fname: ""} },
 
 
 
@@ -43,20 +40,21 @@ export default function Client() {
     dateenvoie: "",
     client: ""
   });
+  
 
   const handleClickGetData = (rowData: any) => {
     console.log(rowData, "Client");
     setRowData(rowData);
   };
 
-  const filterData = (v: { id: number; nom: string; email: string; projet: number } | null) => {
-    if (v && v.nom) {
-      const filteredRows = initialRows.filter(row => row.titre.toLowerCase().includes(v.nom.toLowerCase()));
-      setRows(filteredRows);
-    } else {
-      setRows(initialRows);
-    }
-  };
+  // const filterData = (v: { id: number; nom: string; email: string; projet: number } | null) => {
+  //   if (v && v.nom) {
+  //     const filteredRows = initialRows.filter(row => row.titre.toLowerCase().includes(v.nom.toLowerCase()));
+  //     setRows(filteredRows);
+  //   } else {
+  //     setRows(initialRows);
+  //   }
+  // };
   const [selectedDemande, setSelectedDemande] = useState<{
     id: number;
     titre: string;
@@ -68,6 +66,7 @@ export default function Client() {
   const generatePDF = (selectedData: {
     id: number;
     titre: string;
+    fname:string;
     cahierDeCharge: string;
     description: string;
     dateenvoie: string;
@@ -76,6 +75,44 @@ export default function Client() {
     window.open(pdfUrl, '_blank');
   };
 
+  const storedUserString = localStorage.getItem('user');
+let id: string = ""; 
+
+if (storedUserString) {
+  const storedUser = JSON.parse(storedUserString);
+  id = storedUser.offreur.id; 
+}
+
+let { data: listDemande, error: listDemandesError } = useListDemandeQuery(id)
+
+
+  useEffect(() => {
+    if (listDemande) {
+      console.log('Liste des Demandes:', listDemande);
+    
+      setRows(listDemande);
+      
+    } else if (listDemandesError) {
+      console.error('Erreur lors de la récupération de la liste des demandes:', listDemandesError);
+    }
+  }, [listDemande, listDemandesError]);
+
+  if (storedUserString) {
+    const storedUser = JSON.parse(storedUserString);
+    const fname = storedUser.demandeur.fname;
+  }
+  function convertDate(myDate: string): string {
+   
+    var date = new Date(myDate.toString());
+
+    var jour = date.getDate(); 
+    var mois = (date.getMonth() + 1).toString().padStart(2, '0');
+    var annee = date.getFullYear();
+    const newDateEmission = jour + "/" + mois + "/" + annee ;
+    return newDateEmission;
+}
+
+ 
   return (
     <>
       <Navdahboard />
@@ -88,7 +125,7 @@ export default function Client() {
             disablePortal
             id="combo-box-demo"
             options={initialRows}
-            getOptionLabel={(row) => row.titre}
+            getOptionLabel={(row) => row.title}
             sx={{ width: 300, marginBottom: "15px" }}
             // onChange={(e, v) => filterData(v)}
             renderInput={(params) => <TextField {...params} size="small" label="Recherche " />}
@@ -101,8 +138,9 @@ export default function Client() {
                 <th>Titre</th>
                 <th>Cahier de charge</th>
                 <th>Description</th>
-                <th>Date Envoie</th>
                 <th>Client</th>
+                <th>Date Envoie</th>
+               
 
               </tr>
             </thead>
@@ -111,32 +149,18 @@ export default function Client() {
                 <React.Fragment key={columns.id}>
                   <tr className='table-text' style={{ borderBottom: '1px solid #ddd' }}>
                     <td>{columns.id}</td>
-                    <td>{columns.titre}</td>
-                    <Typography variant="body1" gutterBottom>
-
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => generatePDF(columns)}
-                        style={{
-                          display: 'inline-block',
-                          marginTop: '10px',
-                          margin: '20px',
-                          backgroundColor: '#3B556D',
-                          color: 'white'
-                        }}
-                      >
-                        PDF
-                      </Button>
-                    </Typography>
+                    <td>{columns.title}</td>
+                   
+                    <td>{columns.cc}</td>
                     <td>{columns.description}</td>
-                    <td>{columns.dateenvoie}</td>
-                    <td>{columns.client}</td>
+                    <td>{columns.demandeur.fname}</td>
+                    
+                    <td>{convertDate(columns.date_emission)}</td>
 
 
 
                     <td style={{ whiteSpace: 'nowrap' }}>
-                      <Link to={`/nouvelle/${columns.id}/${columns.titre}/${columns.client}/${columns.dateenvoie}/${columns.description}/${columns.cahierDeCharge}`}>
+                      <Link to={`/nouvelle/${columns.id}/${columns.title}/${columns.demandeur.fname}/${columns.date_emission}/${columns.description}/${columns.cc}`}>
                         <Button
                           style={{
                             padding: '1px 1px',

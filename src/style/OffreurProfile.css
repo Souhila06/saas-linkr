@@ -1,0 +1,32 @@
+.profile-offreur{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+.profile-offreur > div{
+    width: 80%;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.profile-offreur h1{
+    text-align: center;
+    margin: 20px;
+}
+.profile-offreur h2{
+    color: black;
+    padding: 0;
+    text-align: left;
+}
+.avatar-div{
+    display: flex;
+    justify-content: center;
+}
+.hr-clair{
+    border: 1px solid #d7d7d7;
+    margin: 20px;
+    
+}

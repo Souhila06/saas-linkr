@@ -84,8 +84,10 @@ function NavBar() {
         handleCloseMenu();
       } else {
         console.error('La déconnexion a échoué:', result.error);
+        
       }
     } catch (error) {
+    
       console.error('Error during logout:', error);
     }
   };

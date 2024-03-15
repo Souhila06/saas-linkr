@@ -27,6 +27,8 @@ import PrivateRoute from "./PrivateRoute";
 import VerifyEmail from "./component/VerifyEmail"
 import ProfileDemandeur from "./component/ProfileDemandeur"
 import NotFound  from "./component/NotFound"
+import OffreurProfile from './component/OffreurProfile';
+import ProfileOffreur from './component/ProfileOffreur';
 
 
 
@@ -74,6 +76,9 @@ function App() {
         <Route path="/offreur/equipe" element={<Equipe />} />
         <Route path="/offreur/compte" element={<Compte />} />
         <Route path="/offreur/demande" element={<DemandeClient />} />
+
+        <Route path="/offreurProfile/:id" element={<OffreurProfile />} />
+        <Route path="/profileOffreur" element={<ProfileOffreur />} />
 
 
         <Route path="/demandeur/dashboard" element={<DashDemandeur />} />
