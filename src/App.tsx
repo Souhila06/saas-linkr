@@ -29,6 +29,8 @@ import ProfileDemandeur from "./component/ProfileDemandeur"
 import NotFound  from "./component/NotFound"
 import OffreurProfile from './component/OffreurProfile';
 import ProfileOffreur from './component/ProfileOffreur';
+import PageSuccess from './component/PageSuccess';
+import PageFailed from './component/PageFailed';
 
 
 
@@ -79,13 +81,17 @@ function App() {
 
         <Route path="/offreurProfile/:id" element={<OffreurProfile />} />
         <Route path="/profileOffreur" element={<ProfileOffreur />} />
+        <Route path="/success" element={<PageSuccess />} />
+        <Route path="/failed" element={<PageFailed />} />
 
+
+    
 
         <Route path="/demandeur/dashboard" element={<DashDemandeur />} />
         <Route path="/demandeur/mesdemande" element={<Mesdemande />} />
         <Route path="/demandeur/comptedemandeur" element={<CompteDemandeur />} />
 
-        <Route path="/nouvelle-page" element={<SuivreDemande demande={[]} />} />
+        <Route path="/demande/:id" element={<SuivreDemande demande={[]} />} />
         <Route path="/nouvelle/:id/:titre/:client/:dateenvoie/:description/:cahierDeCharge" element={<DetailOffreur closeEvent={() => { }} />} />
 
 

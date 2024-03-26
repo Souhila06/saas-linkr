@@ -126,9 +126,9 @@ export default function SignIn() {
       
       } else {
         setShowErrorAlert(true);
-      setTimeout(() => {
-        setShowErrorAlert(false);
-      }, 3000);
+      // setTimeout(() => {
+      //   setShowErrorAlert(false);
+      // }, 3000);
 
       }
     } else {
@@ -259,11 +259,11 @@ export default function SignIn() {
           )}
           
           
-          {showErrorAlert && (
+          {/* {showErrorAlert && (
             <div style={{ display: showErrorAlert ? 'block' : 'none', marginTop: '10px', padding: '10px', backgroundColor: 'red', color: 'white', borderRadius: '5px' }}>
-              Connexion échouée
+         
             </div>
-          )}
+          )} */}
         </Box>
       </Box>
     </Container>

@@ -9,14 +9,14 @@ interface AddFormProps {
 
 }
 
-const createUser = (titre: string, dateDebut: string, dateLimite: string, projet: string, afecter: string, collaborateur: string, statu: string) => {
+const createUser = (titre: string, dateDebut: string, dateLimite: string, projet: string, afecter: string, duré: string, statu: string) => {
 
   console.log('Titre:', titre);
   console.log('dateDebut:', dateDebut);
   console.log('dateLimite', dateLimite);
   console.log('projetr', projet);
   console.log('afecter', afecter);
-  console.log('collaborateur:', collaborateur);
+ 
   console.log('statu:', statu);
 
 
@@ -51,7 +51,7 @@ const AddForm: React.FC<AddFormProps> = ({ closeEvent }) => {
   const [dateLimite, setDateLimite] = useState('');
   const [projet, setProjet] = useState('');
   const [afecter, setAfecter] = useState('');
-  const [collaborateur, setCollaborateur] = useState('');
+  const [duré, setDuré] = useState('');
   const [statu, seTstatu] = useState('');
 
 
@@ -59,7 +59,7 @@ const AddForm: React.FC<AddFormProps> = ({ closeEvent }) => {
 
   const handleSubmit = () => {
 
-    if (titre && dateDebut && dateLimite && afecter && collaborateur && statu && projet) {
+    if (titre && dateDebut && dateLimite && afecter && duré && statu && projet) {
       setShowDialog(true);
 
     } else {
@@ -76,7 +76,7 @@ const AddForm: React.FC<AddFormProps> = ({ closeEvent }) => {
     setDateLimite('');
     setProjet('');
     setAfecter('');
-    setCollaborateur('');
+    setDuré('');
     seTstatu('');
     closeEvent();
 
@@ -212,7 +212,7 @@ const AddForm: React.FC<AddFormProps> = ({ closeEvent }) => {
               borderColor: '#3B556D',
             },
           }}
-            value={collaborateur} onChange={(e) => setCollaborateur(e.target.value)} >
+            value={duré} onChange={(e) => setDuré(e.target.value)} >
             {currencies.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
@@ -241,7 +241,7 @@ const AddForm: React.FC<AddFormProps> = ({ closeEvent }) => {
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h5" align="center">
-            <Button variant="contained" style={{ backgroundColor: '#3B556D', color: 'white' }} onClick={() => { createUser(titre, dateDebut, dateLimite, projet, afecter, collaborateur, statu); handleSubmit(); }}>
+            <Button variant="contained" style={{ backgroundColor: '#3B556D', color: 'white' }} onClick={() => { createUser(titre, dateDebut, dateLimite, projet, afecter, duré, statu); handleSubmit(); }}>
               Envoyer
             </Button>
           </Typography>

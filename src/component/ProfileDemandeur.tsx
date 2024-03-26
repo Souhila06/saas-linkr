@@ -198,13 +198,14 @@ const handleModify = async () => {
 
     console.log(response)
     if (data) {
-   
+     
       
       // Mise à jour des informations dans le localStorage 
       user.demandeur = demandeurInfo;
       localStorage.setItem('user', JSON.stringify(user));
 
       console.log('Demandeur modifié avec succès:', data);
+      alert('Demandeur modifié avec succès!');
     } else if (error) {
       console.error('Erreur lors de la modification du demandeur:', error);
     }
@@ -351,8 +352,10 @@ const handleModify = async () => {
 
             </div>
             <Grid container justifyContent="center">
+              
               {isDemandeurNotNull ? (
                 // Afficher le bouton Modify si le champ 'demandeur' n'est pas null
+                
                 <Button
                   type="submit"
                   variant="contained"

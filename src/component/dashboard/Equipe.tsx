@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Sidenav from './Sidenav';
 import MuiDrawer from '@mui/material/Drawer';
 import { Autocomplete, Box, Button, TextField, Typography } from "@mui/material";
@@ -9,7 +9,17 @@ import Modal from '@mui/material/Modal';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import AddForm from "./AddFormEquipe";
 import CloseIcon from "@mui/icons-material/Close";
+import { useListOffreursQuery } from "../../services/authApi";
+// import { useListOffreursQuery } from '../services/authApi';
 
+
+interface Offreur {
+  id: number;
+  fname: string;
+  lname: string;
+  apropos: string;
+  city: string;
+}
 const style = {
   position: 'absolute' as 'absolute',
   top: '50%',
@@ -30,46 +40,64 @@ export default function Equipe() {
   const [rowData, setRowData] = React.useState({
     id: 0,
     nom: "",
-    titre: "",
-    email: "",
-    telephone: "",
+    prenom: "",
+    apropos: "",
+    city: "",
   });
 
   const columns: GridColDef[] = [
     { field: 'nom', headerName: 'Nom', width: 130 },
-    { field: 'titre', headerName: 'Titre du poste', width: 130 },
-    { field: 'email', headerName: 'Email', width: 200 },
+    { field: 'prenom', headerName: 'Prenom', width: 130 },
+    { field: 'apropos', headerName: 'A propos', width: 200 },
     {
-      field: 'telephone',
-      headerName: 'Téléphone',
-      type: 'number',
+      field: 'city',
+      headerName: 'ville',
       width: 105,
     },
   ];
 
   const initialRows = [
-    { id: 1, nom: 'souhila', titre: 'Développeur', email: 'souhila@gmail.com', telephone: '0772851706' },
-    { id: 2, nom: 'dagi', titre: 'Développeur', email: 'souhila@gmail.com', telephone: '0772851706' },
-    { id: 3, nom: 'hadjer', titre: 'Développeur', email: 'souhila@gmail.com', telephone: '0772851706' },
-    { id: 4, nom: 'sila', titre: 'Développeur', email: 'souhila@gmail.com', telephone: '0772851706' },
-    { id: 5, nom: 'souhila', titre: 'Développeur', email: 'souhila@gmail.com', telephone: '0772851706' },
+    { id: 1, nom: '', prenom: '', apropo: '', city: '' },
+   
   ];
 
-  const [rows, setRows] = useState(initialRows);
+  // const [rows, setRows] = useState(initialRows);
 
   const handleClickGetData = (rowData: any) => {
     console.log(rowData, "Equipe")
     setRowData(rowData)
   }
 
-  const filterData = (v: { nom: string; titre: string; email: string; telephone: string } | null) => {
-    if (v && v.nom) {
-      const filteredRows = initialRows.filter(row => row.nom.toLowerCase().includes(v.nom.toLowerCase()));
-      setRows(filteredRows);
-    } else {
-      setRows(initialRows);
+  // const filterData = (v: { nom: string; titre: string; email: string; telephone: string } | null) => {
+  //   if (v && v.nom) {
+  //     const filteredRows = initialRows.filter(row => row.nom.toLowerCase().includes(v.nom.toLowerCase()));
+  //     setRows(filteredRows);
+  //   } else {
+  //     setRows(initialRows);
+  //   }
+  // };
+
+  const { data: listOffreurs } = useListOffreursQuery({});
+  console.log("Liste des offreurs:", listOffreurs);
+
+  const rows = useMemo(() => {
+    if (listOffreurs) {
+      console.log("Offreurs mappés:", listOffreurs);
+      return listOffreurs.map((offreur: Offreur) => ({
+        id: offreur.id,
+        nom: offreur.fname ,
+        prenom: offreur.lname,
+        apropos: offreur.apropos,
+        city: offreur.city,
+      }));
     }
-  };
+    return [];
+  }, [listOffreurs]);
+  
+  console.log("Lignes de données:", rows);
+  
+ 
+
 
   return (
     <>
@@ -95,9 +123,9 @@ export default function Equipe() {
               disablePortal
               id="combo-box-demo"
               options={rows}
-              getOptionLabel={(row) => row.nom}
-              sx={{ width: 300 }}
-              onChange={(e, v) => filterData(v)}
+              // getOptionLabel={(row) => row.nom}
+              // sx={{ width: 300 }}
+              // onChange={(e, v) => filterData(v)}
               renderInput={(params) => <TextField {...params} size="small" label="Recherche " />}
             />
             <Button

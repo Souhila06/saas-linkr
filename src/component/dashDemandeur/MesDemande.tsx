@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import SidDemandeur from './SidDemandeur';
 import MuiDrawer from '@mui/material/Drawer';
 import { Autocomplete, Box, Button, TextField, Typography } from "@mui/material";
@@ -10,10 +10,11 @@ import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import Modal from '@mui/material/Modal';
 import jsPDF from 'jspdf';
 import { Link } from 'react-router-dom';
+import { useListDemandeDemandeurQuery } from '../../services/authApi';
 
 
 export default function MesDemande() {
-
+  const [rows, setRows] = useState<any[]>([]);
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -28,14 +29,14 @@ export default function MesDemande() {
 
   ];
  
-  const rows = [
-    { id: 1, titre: 'site web',  nomoffreur: 'souhila', cahierDeCharge: 'C:/Users/Souhila/Downloads/mon_cahier_de_charges.pdf',description:'je veux un site un ecommerce' ,dateenvoie:'12/07/2001'},
-    { id: 2, titre: 'site web',  nomoffreur: 'souhila', cahierDeCharge: 'C:/Users/Souhila/Downloads/mon_cahier_de_charges.pdf',description:'je veux un site un ecommerce' ,dateenvoie:'12/07/2001'},
-    { id: 3, titre: 'site web',  nomoffreur: 'souhila', cahierDeCharge: 'C:/Users/Souhila/Downloads/mon_cahier_de_charges.pdf',description:'je veux un site un ecommerce' ,dateenvoie:'12/07/2001'},
-    { id: 4, titre: 'site web',  nomoffreur: 'souhila', cahierDeCharge: 'C:/Users/Souhila/Downloads/mon_cahier_de_charges.pdf',description:'je veux un site un ecommerce' ,dateenvoie:'12/07/2001'},
+  // const rows = [
+  //   { id: 1, titre: 'site web',  nomoffreur: 'souhila', cahierDeCharge: 'C:/Users/Souhila/Downloads/mon_cahier_de_charges.pdf',description:'je veux un site un ecommerce' ,dateenvoie:'12/07/2001'},
+  //   { id: 2, titre: 'site web',  nomoffreur: 'souhila', cahierDeCharge: 'C:/Users/Souhila/Downloads/mon_cahier_de_charges.pdf',description:'je veux un site un ecommerce' ,dateenvoie:'12/07/2001'},
+  //   { id: 3, titre: 'site web',  nomoffreur: 'souhila', cahierDeCharge: 'C:/Users/Souhila/Downloads/mon_cahier_de_charges.pdf',description:'je veux un site un ecommerce' ,dateenvoie:'12/07/2001'},
+  //   { id: 4, titre: 'site web',  nomoffreur: 'souhila', cahierDeCharge: 'C:/Users/Souhila/Downloads/mon_cahier_de_charges.pdf',description:'je veux un site un ecommerce' ,dateenvoie:'12/07/2001'},
 
  
-  ];
+  // ];
   
 
   const [rowData, setRowData] = React.useState({
@@ -70,6 +71,38 @@ export default function MesDemande() {
         pdf.save('demande_info.pdf');
     }
 };
+
+const storedUserString = localStorage.getItem('user');
+let id: string = ""; 
+
+if (storedUserString) {
+  const storedUser = JSON.parse(storedUserString);
+  id = storedUser.demandeur.id; 
+}
+
+const { data: listDemandeDemandeur, error: listDemandeDemandeurError } = useListDemandeDemandeurQuery(id);
+
+useEffect(() => {
+  if (listDemandeDemandeur) {
+    console.log('Liste des Demandes du Demandeur:', listDemandeDemandeur);
+    setRows(listDemandeDemandeur);
+  } else if (listDemandeDemandeurError) {
+    console.error('Erreur lors de la récupération de la liste des demandes du demandeur:', listDemandeDemandeurError);
+  }
+}, [listDemandeDemandeur, listDemandeDemandeurError]);
+
+function convertDate(myDate: string): string {
+   
+  var date = new Date(myDate.toString());
+
+  var jour = date.getDate(); 
+  var mois = (date.getMonth() + 1).toString().padStart(2, '0');
+  var annee = date.getFullYear();
+  const newDateEmission = jour + "/" + mois + "/" + annee ;
+  return newDateEmission;
+}
+
+
 
   return (
     <><Navdashboard />
@@ -106,11 +139,11 @@ export default function MesDemande() {
                         <React.Fragment key={columns.id}>
                             <tr className='table-text' style={{ borderBottom: '1px solid #ddd' }}>
                                 <td>{columns.id}</td>
-                                <td>{columns.titre}</td>
-                                <td>{columns.nomoffreur}</td>
+                                <td>{columns.title}</td>
+                                <td>{columns.offreur.fname}</td>
                                 
                                 <td>{columns.description}</td>
-                                <td>{columns.dateenvoie}</td>
+                                <td>{convertDate(columns.date_emission)}</td>
                                 <Typography variant="body1" gutterBottom>
 
                                     <Button
@@ -125,7 +158,7 @@ export default function MesDemande() {
 
 
                                 <td style={{ whiteSpace: 'nowrap' }}>
-                                    <Link to='/nouvelle-page'>
+                                <Link to={`/demande/${columns.id}`}>
                                         <Button 
                                              style={{
                                                 padding: '2px px',

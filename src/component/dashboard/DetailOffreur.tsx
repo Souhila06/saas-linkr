@@ -37,6 +37,7 @@ import {
   useRefuserDemandeMutationMutation,
   useAccepterDemandeMutationMutation,
   useShowDemandeQueryQuery,
+  useCreateCheckoutSessionMutationMutation,
 } from "../../services/authApi";
 import dayjs from "dayjs";
 
@@ -347,6 +348,10 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
 
   const valeurStockee = localStorage.getItem("motif_refus");
   console.log(valeurStockee);
+
+  const [createCheckoutSession] = useCreateCheckoutSessionMutationMutation();
+  
+
   return (
     <>
       <Navdashboard />
@@ -544,7 +549,7 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                                       },
                                     "& .Mui-focused .MuiOutlinedInput-notchedOutline":
                                       {
-                                        borderColor: "#3B556D", // Couleur de bordure lorsqu'il est en surbrillance
+                                        borderColor: "#3B556D", // Couleur de bordurlorsqu'il est en surbrillance
                                       },
                                     "& .Mui-focused .MuiInputLabel-root": {
                                       color: "#3B556D", // Couleur de l'étiquette lorsqu'il est en surbrillance
@@ -836,7 +841,7 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
               </div>
 
               <>
-                {rdvAccepter && (
+                {  (
                   <div className="div-demande">
                     <div className="div-rdv">
                       <h1>Rendez-vous</h1>
@@ -852,9 +857,9 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                         )}
                       </div>
                     </div>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DateCalendar defaultValue={dayjs(demande.rdv.date)} disabled />
-                    </LocalizationProvider>
+                    </LocalizationProvider> */}
                   </div>
                 )}
                 <hr className="hr-1" />
@@ -868,7 +873,7 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
                       </a>
                     </div>
 
-                    <a href="">Payer</a>
+                    {/* <a href="#" >Payer</a> */}
                   </div>
                 </div>
               </>

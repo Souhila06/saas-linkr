@@ -43,8 +43,9 @@ export default function Tache() {
     { field: 'dateLimite', headerName: 'Date limite', width: 110 },
     { field: 'projet', headerName: 'Projet', width: 95 },
     { field: 'afecter', headerName: 'Affecté a', width: 110 },
-    { field: 'collaborateur', headerName: 'Collaborateur', width: 150 },
     { field: 'statu', headerName: 'Statue', width: 100 },
+    { field: 'collaborateur', headerName: 'Collaborateur', width: 150 },
+
   ];
 
   const initialRows = [

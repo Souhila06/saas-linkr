@@ -1,3 +1,5 @@
+import React, { useState, useEffect, ChangeEvent } from "react";
+import { useParams } from "react-router-dom";
 import { ClassNames } from "@emotion/react";
 import {
   Box,
@@ -12,10 +14,9 @@ import {
   Typography,
 } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
-import React, { ChangeEvent, useEffect, useState } from "react";
+
 import "../style/OffreurProfile.css";
 import CloseIcon from "@mui/icons-material/Close";
-import { useParams } from "react-router-dom";
 import {
   useShowOffreurQuery,
   useShowListExperienceQuery,
@@ -49,12 +50,7 @@ interface Offreur {
   zip: string;
   skills: Skill[];
   experiences: Experience[];
-  //   skills: {
-  //     level: number;
-  //     skill: {
-  //       label: string;
-  //     };
-  //   }[];
+
   _count: {
     evaluations: number;
   };
@@ -62,65 +58,96 @@ interface Offreur {
 interface Demande {
   titre: string;
   description: string;
-  pdf: string; 
+  pdf: string;
 }
 const OffreurProfile: React.FC<{}> = ({}) => {
   const [openGenerateDemande, setOpenGenerateDemande] = useState(false);
-  const [title, setTitle] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
-  const [cc, setCc] = useState<string>('');
-  console.log(cc)
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [cc, setCc] = useState<string>("");
+
   const handleOpenGenerateDem = () => setOpenGenerateDemande(true);
   const handleCloseDemande = () => {
     setOpenGenerateDemande(false);
-   setCc(""); 
+    setCc("");
     setTitle("");
     setDescription("");
   };
-  const { id } = useParams<{ id: string }>();
- 
 
-  if (!id) {
-    return <div>Paramètre ID manquant.</div>;
-  }
+  const [offreurInfo, setOffreurInfo] = useState<Offreur>({
+    fname: "",
+    lname: "",
+    apropos: "",
+    country: "",
+    city: "",
+    zip: "",
+    skills: [],
+    experiences: [],
+    _count: {
+      evaluations: 0,
+    },
+  });
 
-  const { data: offreur, error, isLoading } = useShowOffreurQuery(id);
+  // const { fname, lname, apropos, skills, evaluations } = offreur;
 
-  if (!offreur) {
-    return <div>Offreur not found</div>;
-  }
-
-  const { fname, lname, apropos, skills, evaluations } = offreur;
-
-  
   // console.log(
   // const [getOffreurByID] = useGetOffreurByIDMutation(); // On utilise la mutation
 
   // useEffect(() =>
   //     if (id) {
   //       getOffreurByID({ id });
-  
+
   //   }, [getOffreurByID, id// On écoute les changements de l'ID pour refaire la requête si nécessaire
 
-  const { data: experiences } = useShowListExperienceQuery(id);
-  useEffect(() => {
-   
-    console.log(experiences);
-  }, []);
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // const { data: experiences } = useShowListExperienceQuery(id);
 
-  if (error) {
-    return <div>Error: </div>;
+  let idOf = "";
+  const { id } = useParams<{ id: string }>(); // Optional string type for id
+  if (id) {
+    idOf = id;
   }
-
-  if (!experiences) {
-    return <div>No experiences found for this offreur</div>;
-  }
-  const getRatingValue = (note: number): number => {
-    return note;
+  const getInfoOffreur = async (id: string) => {
+    const response = await useShowOffreurQuery(id);
+    if (response.data) {
+      setOffreurInfo({
+        fname: response.data.fname,
+        lname: response.data.lname,
+        apropos: response.data.apropos,
+        country: response.data.country,
+        city: response.data.city,
+        zip: response.data.zip,
+        skills: response.data.skills ?? [],
+        experiences: response.data.experiences ?? [],
+        _count: {
+          evaluations: 0,
+        },
+      });
+    }
   };
+  getInfoOffreur(idOf);
+
+  // useEffect(() => {
+  //   // console.log(response)
+  //   // console.log(offreur+"bbbbbbbbbb")
+  //   // if (offreur) {
+  //   //   setOffreurInfo({
+  //   //     fname: offreur.fname ,
+  //   //     lname: offreur.lname,
+  //   //     apropos: offreur.apropos,
+  //   //     country: offreur.country,
+  //   //     city: offreur.city,
+  //   //     zip: offreur.zip,
+  //   //     skills: offreur.skills ?? [],
+  //   //     experiences: offreur.experiences ?? [],
+  //   //     _count: {
+  //   //       evaluations:  0,
+  //   //     },
+  //   //   });
+  //     console.log("aaaaaaaaaaaaaaaaa")
+  //   }
+  //   console.log(offreur)
+  // }, []);
+
   // const averageRating =
   //   evaluations.reduce((acc: any, curr: any) => acc + curr.note, 0) /
   //   evaluations.length;
@@ -134,14 +161,16 @@ const OffreurProfile: React.FC<{}> = ({}) => {
       if (cc) {
         formData.append("cc", cc);
       }
-      formData.append("offreurId",id
-      )
+      // formData.append("offreurId",id)
       console.log(formData);
-      const storedUser1 = localStorage.getItem('user');
+      const storedUser1 = localStorage.getItem("user");
       let userstore = storedUser1 ? JSON.parse(storedUser1) : null;
-      const demandeurId = userstore.demandeur.id; 
-      const response = await createDemandeMutation({body:formData,demandeurId});
-
+      const demandeurId = userstore.demandeur.id;
+      const response = await createDemandeMutation({
+        body: formData,
+        demandeurId,
+      });
+      alert("Demande envoyée avec succès");
       console.log(response);
     } catch (error) {
       console.error("Erreur lors de l'envoi de la demande:", error);
@@ -149,43 +178,51 @@ const OffreurProfile: React.FC<{}> = ({}) => {
   };
   return (
     <section className="profile-offreur">
+      <h1> Profile Ofrreur</h1>
       <div>
         <div className="avatar-div">
           <Avatar sx={{ width: 100, height: 100, textAlign: "center" }}>
-            {fname && lname
-              ? `${fname[0].toUpperCase()}${lname[0].toUpperCase()}`
+            {offreurInfo.fname && offreurInfo.lname
+              ? `${offreurInfo.fname[0].toUpperCase()}${offreurInfo.lname[0].toUpperCase()}`
               : ""}
           </Avatar>
         </div>
-        <h1>{`${fname} ${lname}`}</h1>
-        <p>{apropos}</p>
+        <h1>{`${offreurInfo.fname} ${offreurInfo.lname}`}</h1>
+        <p>{offreurInfo.apropos}</p>
       </div>
 
       <div>
         <h2>Experiences</h2>
-        {experiences.map((experience: Experience, index: number) => (
-          <div key={index}>
-            <h3>{experience.title}</h3>
-            <p>{experience.description}</p>
-            <p>
-              From: {experience.from} - To: {experience.to}
-            </p>
-          </div>
-        ))}
+        {offreurInfo.experiences.map(
+          (experience: Experience, index: number) => (
+            <div key={index}>
+              <h3>{experience.title}</h3>
+              <p>{experience.description}</p>
+              <p>
+                From: {experience.from} - To: {experience.to}
+              </p>
+            </div>
+          )
+        )}
       </div>
 
       <div>
         <h2>Skills</h2>
         <Stack direction="row" spacing={1} sx={{ paddingBottom: 1 }}>
-          {skills.map((skill: Skill, index: number) => (
+          {offreurInfo.skills.map((skill: Skill, index: number) => (
             <Chip key={index} label={skill.skill.label} />
           ))}
         </Stack>
       </div>
       <div>
         <h2>Evaluations</h2>
-
-        <ul>
+        <Rating
+          name="half-rating-read"
+          defaultValue={4}
+          precision={4}
+          readOnly
+        />
+        {/* <ul>
           {evaluations.map((evaluation: any) => (
             <li key={evaluation.id}>
               <Rating
@@ -198,10 +235,11 @@ const OffreurProfile: React.FC<{}> = ({}) => {
               <p>Date: {evaluation.date}</p>
             </li>
           ))}
-        </ul>
+        </ul> */}
       </div>
 
       <Button
+        id="monBoutonContactez" 
         type="submit"
         variant="contained"
         style={{ marginTop: "30px", backgroundColor: "#3B556D" }}
@@ -225,7 +263,7 @@ const OffreurProfile: React.FC<{}> = ({}) => {
           }}
         >
           <Typography variant="h5" align="center">
-            Contacter
+            Envoyer une demande de service
           </Typography>
           <IconButton
             style={{ position: "absolute", top: "0", right: "0" }}
@@ -237,6 +275,7 @@ const OffreurProfile: React.FC<{}> = ({}) => {
             <Grid item xs={12}>
               <TextField
                 label="Title"
+                id="title-field" 
                 fullWidth
                 value={title}
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -246,7 +285,7 @@ const OffreurProfile: React.FC<{}> = ({}) => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                id="outlined-multiline-static"
+                id="description-field"
                 label="Description"
                 multiline
                 rows={4}
@@ -277,6 +316,7 @@ const OffreurProfile: React.FC<{}> = ({}) => {
             <Grid item xs={12}>
               <TextField
                 label="cc"
+                id="cc-field"
                 fullWidth
                 value={cc}
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -300,6 +340,7 @@ const OffreurProfile: React.FC<{}> = ({}) => {
               <Button
                 style={{ backgroundColor: "#3B556D", color: "white" }}
                 variant="contained"
+                id="sendButton"
                 onClick={handleSendDemande}
               >
                 Envoyer

@@ -197,6 +197,9 @@ createDemande: builder.mutation({
 listDemande: builder.query({
   query: (id: string) => `/api/offreur/${id}/demandes`,
 }),
+listDemandeDemandeur: builder.query({
+  query: (id: string) => `/api/demandeur/${id}/demandes`,
+}),
 listSkills: builder.query({
   query: () => `/api/skills`, 
 }),
@@ -209,7 +212,12 @@ showDemandeQuery: builder.query({
     method: 'GET',
   }),
 }),
-
+showDemandeDemandeurQuery: builder.query({
+  query: ({ demandeurId, demandeId }) => ({
+    url: `/api/demandeur/${demandeurId}/demandes/${demandeId}`,
+    method: 'GET',
+  }),
+}),
 traiterDemandeMutation: builder.mutation({
   query: ({ body,offreurId, id }) => ({
     url: `/api/offreur/${offreurId}/demandes/${id}/traiter`,
@@ -253,6 +261,12 @@ showSkill: builder.query({
     method: 'GET',
   }),
 }),
+createCheckoutSessionMutation: builder.mutation({
+  query: ({ demandeurId, demandeId }) => ({
+    url: `/api/demandeur/${demandeurId}/demandes/${demandeId}/create-checkout-session`,
+    method: 'PUT',
+  }),
+}),
   }),
 
 
@@ -261,4 +275,4 @@ showSkill: builder.query({
 
 
 
-export const { useLoginUserMutation, useRegisterUserMutation, useForgotPasswordMutation, useLogoutMutation, useListOffreursQuery, useVerifyEmailQuery,useListDemandeursQuery, useCreateDemandeurMutation ,useModifyDemandeurMutation,useDeleteDemandeurMutation ,useGetOffreurByIDMutation,useShowOffreurQuery,useShowExperienceQuery,useShowListExperienceQuery,useShowListEvaluationQuery,useCreateDemandeMutation, useListDemandeQuery,useTraiterDemandeMutationMutation,useRefuserDemandeMutationMutation,useAccepterDemandeMutationMutation,useShowDemandeQueryQuery,useAddSkillsMutationMutation,useListSkillsQuery,useCreateExperienceMutationMutation,useCreateOffreurMutation,useModifyOffreurMutation,useDeleteOffreurMutation,useShowSkillQuery} = authApi;
+export const { useLoginUserMutation, useRegisterUserMutation, useForgotPasswordMutation, useLogoutMutation, useListOffreursQuery, useVerifyEmailQuery,useListDemandeursQuery, useCreateDemandeurMutation ,useModifyDemandeurMutation,useDeleteDemandeurMutation ,useGetOffreurByIDMutation,useShowOffreurQuery,useShowExperienceQuery,useShowListExperienceQuery,useShowListEvaluationQuery,useCreateDemandeMutation, useListDemandeQuery,useTraiterDemandeMutationMutation,useRefuserDemandeMutationMutation,useAccepterDemandeMutationMutation,useShowDemandeQueryQuery,useAddSkillsMutationMutation,useListSkillsQuery,useCreateExperienceMutationMutation,useCreateOffreurMutation,useModifyOffreurMutation,useDeleteOffreurMutation,useShowSkillQuery,useCreateCheckoutSessionMutationMutation,useListDemandeDemandeurQuery,useShowDemandeDemandeurQueryQuery} = authApi;
