@@ -24,6 +24,7 @@ import {
 } from "../services/authApi";
 import { ConstructionOutlined } from "@mui/icons-material";
 import { csCZ } from "@mui/x-date-pickers";
+import NavBar from "./NavBar";
 
 interface Experience {
   title: string;
@@ -106,26 +107,26 @@ const OffreurProfile: React.FC<{}> = ({}) => {
   if (id) {
     idOf = id;
   }
-  const getInfoOffreur = async (id: string) => {
-    const response = await useShowOffreurQuery(id);
-    if (response.data) {
+    const{data}= useShowOffreurQuery(idOf);
+
+  // getInfoOffreur(idOf);
+  useEffect(() => {
+    if(data){
       setOffreurInfo({
-        fname: response.data.fname,
-        lname: response.data.lname,
-        apropos: response.data.apropos,
-        country: response.data.country,
-        city: response.data.city,
-        zip: response.data.zip,
-        skills: response.data.skills ?? [],
-        experiences: response.data.experiences ?? [],
+        fname: data.fname,
+        lname: data.lname,
+        apropos: data.apropos,
+        country: data.country,
+        city: data.city,
+        zip: data.zip,
+        skills: data.skills ?? [],
+        experiences: data.experiences ?? [],
         _count: {
           evaluations: 0,
         },
       });
     }
-  };
-  getInfoOffreur(idOf);
-
+  }, [data]);
   // useEffect(() => {
   //   // console.log(response)
   //   // console.log(offreur+"bbbbbbbbbb")
@@ -161,7 +162,7 @@ const OffreurProfile: React.FC<{}> = ({}) => {
       if (cc) {
         formData.append("cc", cc);
       }
-      // formData.append("offreurId",id)
+      formData.append("offreurId",idOf)
       console.log(formData);
       const storedUser1 = localStorage.getItem("user");
       let userstore = storedUser1 ? JSON.parse(storedUser1) : null;
@@ -177,6 +178,7 @@ const OffreurProfile: React.FC<{}> = ({}) => {
     }
   };
   return (
+    <><NavBar />
     <section className="profile-offreur">
       <h1> Profile Ofrreur</h1>
       <div>
@@ -241,9 +243,9 @@ const OffreurProfile: React.FC<{}> = ({}) => {
       <Button
         id="monBoutonContactez" 
         type="submit"
-        variant="contained"
+        // variant="contained"
         style={{ marginTop: "30px", backgroundColor: "#3B556D" }}
-        onClick={handleOpenGenerateDem}
+        onClick={() => setOpenGenerateDemande(true)}
       >
         Contactez
       </Button>
@@ -350,6 +352,7 @@ const OffreurProfile: React.FC<{}> = ({}) => {
         </Box>
       </Modal>
     </section>
+    </>
   );
 };
 

@@ -841,26 +841,35 @@ const DetailOffreur: React.FC<DetailOffreurProps> = ({ closeEvent }) => {
               </div>
 
               <>
-                {  (
-                  <div className="div-demande">
-                    <div className="div-rdv">
-                      <h1>Rendez-vous</h1>
-                      <div>
-                        <span>Date : {demande.rdv.date}</span>
-                        <span>Heure : {demande.rdv.heure}</span>
-                        <span>Type : {demande.rdv.type}</span>
-
-                        {demande.rdv.type === "visio" ? (
-                          <span>Lien : {demande.rdv.link}</span>
-                        ) : (
-                          <span>Endroit : {demande.rdv.address}</span>
-                        )}
+                {   (
+              
+                  <>
+                  {demande.rdv && (
+                    <div className="div-demande">
+                      <div className="div-rdv">
+                        <h1>Rendez-vous</h1>
+                        <div>
+                          <span>Date : {demande.rdv.date}</span>
+                          <span>Heure : {demande.rdv.heure}</span>
+                          <span>Type : {demande.rdv.type}</span>
+                          {demande.rdv.type === "visio" ? (
+                            <span>Lien : {demande.rdv.link}</span>
+                          ) : (
+                            <span>Endroit : {demande.rdv.address}</span>
+                          )}
+                        </div>
                       </div>
+                      {/* Calendrier pour la date */}
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DateCalendar
+                          value={dayjs(demande.rdv.date)}
+                          disabled
+                        />
+                      </LocalizationProvider>
                     </div>
-                    {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DateCalendar defaultValue={dayjs(demande.rdv.date)} disabled />
-                    </LocalizationProvider> */}
-                  </div>
+                  )}
+                  </>
+              
                 )}
                 <hr className="hr-1" />
                 <div className="div-facture">

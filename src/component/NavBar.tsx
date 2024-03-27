@@ -45,6 +45,8 @@ function NavBar() {
 
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
+
 
 
 
@@ -111,11 +113,23 @@ function NavBar() {
       if (storedUser) {
         const user = JSON.parse(storedUser);
         setUsername(user.username);
+        setRole(user.role)
       }
     }
   }, []);
 
-  
+ const [redirectTo, setRedirectTo] = useState(null);
+
+// Fonction pour gérer la fermeture du menu et la redirection
+const handleProfileClick = () => {
+  handleCloseMenu(); // Fermez le menu
+  // Rediriger en fonction du rôle de l'utilisateur
+  if (role === 'demandeur') {
+    window.location.href = '/demandeur/mesdemande'; // Rediriger vers le tableau de bord du demandeur
+  } else if (role === 'offreur') {
+    window.location.href = '/offreur/dashboard'; // Rediriger vers le tableau de bord du demandeur
+  } 
+}
   return (
     <AppBar position="static" sx={{ display: 'flex', alignItems: 'center', background: '#3B556D' }}>
       <Container maxWidth="xl" >
@@ -179,6 +193,7 @@ function NavBar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
+              
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
@@ -206,15 +221,53 @@ function NavBar() {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
+          <Button
+  key={"accueil"}
+  component={Link}
+  to={`/`}
+  onClick={handleCloseNavMenu}
+  sx={{ my: 2, color: 'white', display: 'block' }}
+>
+  {"Accueil"}
+</Button>
+<Button
+  key={"service"}
+  component={Link}
+  to={`/service`}
+  onClick={handleCloseNavMenu}
+  sx={{ my: 2, color: 'white', display: 'block' }}
+>
+  {"service"}
+</Button>
+
+<Button
+      key={"apropos"}
+      component={Link}
+      to={`/apropos`}
+      onClick={handleCloseNavMenu}
+      sx={{ my: 2, color: 'white', display: 'block' }}
+    >
+      {"A propos"}
+    </Button>
+    <Button
+      key={"notrecommunaute"}
+      component={Link}
+      to={`/notrecommunaute`}
+      onClick={handleCloseNavMenu}
+      sx={{ my: 2, color: 'white', display: 'block' }}
+    >
+      {"Notre Communauté"}
+    </Button>
+  
+    <Button
+      key={"avisclients"}
+      component={Link}
+      to={`/avisclients`}
+      onClick={handleCloseNavMenu}
+      sx={{ my: 2, color: 'white', display: 'block' }}
+    >
+      {"Avis Clients"}
+    </Button>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -300,7 +353,7 @@ function NavBar() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleCloseMenu}>
+        <MenuItem onClick={handleProfileClick}>
           <Avatar /> Profile
         </MenuItem>
         <MenuItem onClick={handleCloseMenu}>

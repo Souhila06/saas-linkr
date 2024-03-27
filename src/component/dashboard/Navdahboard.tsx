@@ -17,6 +17,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
+import { useLogoutMutation } from '../../services/authApi';
 
 const theme = createTheme({
   palette: {
@@ -92,6 +93,9 @@ export default function Navdahboard() {
     setMobileMoreAnchorEl(null);
   };
 
+  const handleGoAccueil = () => {
+    window.location.href = "/"
+  };
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
@@ -100,6 +104,29 @@ export default function Navdahboard() {
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+  const [logout] = useLogoutMutation();
+const handleLogout = async () => {
+  try {
+    const result = await logout({});
+   
+
+    if ('data' in result) {
+      console.log('Déconnexion réussie');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
+
+      window.location.href = '/login';
+     
+   
+    } else {
+      console.error('La déconnexion a échoué:', result.error);
+      
+    }
+  } catch (error) {
+  
+    console.error('Error during logout:', error);
+  }
+};
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -119,8 +146,8 @@ export default function Navdahboard() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleGoAccueil}>Accueil</MenuItem>
+      <MenuItem onClick={handleLogout}>Deconnection</MenuItem>
     </Menu>
   );
 

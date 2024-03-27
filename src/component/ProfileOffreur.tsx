@@ -347,6 +347,8 @@ const ProfileOffreur: React.FC = () => {
         offreurId: offreurId,
       });
 
+      window.location.href = "/profileoffreur"
+
       console.log("Compétences ajoutées avec succès:", response);
     } catch (error) {
       console.error("Erreur lors de l'ajout des compétences:", error);
@@ -388,6 +390,8 @@ const ProfileOffreur: React.FC = () => {
         offreurId: offreurId,
         body: experienceInfo,
       });
+      window.location.href = "/profileoffreur"
+
       console.log("Expérience créée avec succès !", result);
     } catch (error) {
       console.error("Erreur lors de la création de l'expérience :", error);
@@ -607,7 +611,7 @@ const ProfileOffreur: React.FC = () => {
               <Button
                 variant="contained"
                 endIcon={<AddCircleIcon />}
-                onClick={handleOpenSkills}
+                onClick={handleOpen}
                 sx={{
                   marginLeft: "10px",
                   backgroundColor: "#3B556D",
@@ -783,7 +787,7 @@ const ProfileOffreur: React.FC = () => {
                   </div>
                   <TextField
                     id="outlined-basic"
-                    label="Client"
+                    label="Skill"
                     variant="outlined"
                     size="small"
                     select
@@ -806,7 +810,7 @@ const ProfileOffreur: React.FC = () => {
                     value={selectedValue}
                     onChange={handleSelectChange}
                   >
-                    {skills.map((option: Skill) => (
+                    {skillss.map((option: Skill) => (
                       <MenuItem
                         key={option.id}
                         value={option.label}
