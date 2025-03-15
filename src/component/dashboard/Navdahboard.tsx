@@ -219,7 +219,6 @@ const handleLogout = async () => {
                 display: { xs: 'none', sm: 'block' },
                 color: '#3B556D', 
                 marginLeft: '20px',
-                fontFamily: 'Fantasy', 
                 fontSize: '1.7rem', 
               }}
             >
