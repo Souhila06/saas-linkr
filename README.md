@@ -1,36 +1,25 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-# React + TypeScript + Vite
+# <p align="center">E commerce</p>
+  
+L'objectif de ce projet était de réaliser un site e-commerce spécialisé dans la vente de meubles et de literie.
+    
+## 🧐 Fonctionnalités    
+- Création et gestion des profils utilisateurs
+- Mise en relation entre demandeurs et offreurs
+- Système de recherche et de filtrage avancé
+- Gestion des demandes de service et des offres
+- Messagerie intégrée pour faciliter la communication
+- Gestion des avis et évaluations des prestataires
+- Tableau de bord utilisateur et espace administrateur
+- Notifications en temps réel
+- Paiement sécurisé et suivi des transactions
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🛠️ Tech Stack
+- [React]()
+- [Material UI]()
+- [Typescript]()
 
-Currently, two official plugins are available:
+----------
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-=======
-# siteReact
->>>>>>> ac02cdfc4af4b193f85207dd9b1c0505c37eefaa
-=======
-# prj-long-client
-Frontend (React js + TypeScript) de la plateforme web de mise en relation pour offreurs et demandeurs de services de développement
->>>>>>> f11039a6af9e3623b0ed899a2e1e688b4099bc9d
+![Image](https://github.com/Souhila06/saas-linkr/blob/main/images/image3.png?raw=true)
+![Image](https://github.com/Souhila06/saas-linkr/blob/main/images/image2.png?raw=true)
+![Image](https://github.com/Souhila06/saas-linkr/blob/main/images/image1.png?raw=true)
